@@ -2,6 +2,8 @@
 
 _It's better to fail big than succeed small._
 
+![DNAmaker](./DNAmaker.png)
+
 - primer design
 - plasmid construction
 - annotation
@@ -84,15 +86,15 @@ Own everything that interacts directly with SnapGene.
 
 ### Responsibilities
 
-* SnapGene CLI wrapper
-* `.dna` ↔ GenBank/FASTA conversion
-* DNA map rendering
-* Opening files in SnapGene
-* GUI automation
-* SnapGene-specific workflows
-* Window/dialog detection
-* Error handling and retries
-* Automation of functionality unavailable through the CLI
+- SnapGene CLI wrapper
+- `.dna` ↔ GenBank/FASTA conversion
+- DNA map rendering
+- Opening files in SnapGene
+- GUI automation
+- SnapGene-specific workflows
+- Window/dialog detection
+- Error handling and retries
+- Automation of functionality unavailable through the CLI
 
 ### Target interface
 
@@ -115,20 +117,20 @@ Own all sequence and molecular-biology logic.
 
 ### Responsibilities
 
-* GenBank/FASTA parsing and writing
-* Sequence manipulation
-* Feature/annotation management
-* Primer management
-* Primer design
-* Restriction-site analysis
-* ORF detection
-* Translation
-* PCR simulation
-* Gibson assembly
-* Golden Gate assembly
-* Restriction cloning
-* Construct validation
-* Biological constraints and rules
+- GenBank/FASTA parsing and writing
+- Sequence manipulation
+- Feature/annotation management
+- Primer management
+- Primer design
+- Restriction-site analysis
+- ORF detection
+- Translation
+- PCR simulation
+- Gibson assembly
+- Golden Gate assembly
+- Restriction cloning
+- Construct validation
+- Biological constraints and rules
 
 The biology engine must be usable without SnapGene running.
 
@@ -161,16 +163,16 @@ Own the AI-facing system.
 
 ### Responsibilities
 
-* Natural-language understanding
-* Workflow planning
-* MCP/tool definitions
-* Tool selection
-* Agent state
-* Multi-step execution
-* Validation before destructive operations
-* Error recovery
-* User-facing responses
-* End-to-end integration tests
+- Natural-language understanding
+- Workflow planning
+- MCP/tool definitions
+- Tool selection
+- Agent state
+- Multi-step execution
+- Validation before destructive operations
+- Error recovery
+- User-facing responses
+- End-to-end integration tests
 
 Example tool set:
 
@@ -244,12 +246,12 @@ Avoid coupling the biology engine directly to SnapGene or making the agent depen
 
 Every major operation should have:
 
-* A structured input
-* A structured output
-* Validation
-* Clear errors
-* Unit tests
-* Integration tests where appropriate
+- A structured input
+- A structured output
+- Validation
+- Clear errors
+- Unit tests
+- Integration tests where appropriate
 
 ---
 
