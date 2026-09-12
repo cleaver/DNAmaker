@@ -6,16 +6,32 @@ build-backend = "setuptools.build_meta"
 name = "dna-maker-agent"
 version = "0.1.0"
 description = "MCP orchestration layer for reproducible DNA-engineering workflows"
+readme = "README.md"
+authors = [
+    { name = "Cleaver Barnes", email = "295771+cleaver@users.noreply.github.com" }
+]
 requires-python = ">=3.11"
 # MCP 1.10 provides the stdio FastMCP API used here without pulling the
 # optional cryptography build required by newer releases on Python 3.14.
-dependencies = ["mcp>=1.10,<1.11"]
+dependencies = [
+    "mcp>=1.10,<1.11",
+    "biopython>=1.88",
+    "pydantic>=2.13.5",
+]
 
 [project.scripts]
 dna-maker-mcp = "agent.server:main"
+dnamaker = "dnamaker:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.7",
+]
+
 [tool.setuptools.packages.find]
-include = ["agent*", "snapgene*", "biology*"]
+where = [".", "src"]
+include = ["agent*", "snapgene*", "biology*", "dnamaker*"]
