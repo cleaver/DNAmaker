@@ -16,6 +16,27 @@ _It's better to fail big than succeed small._
 
 We are building an AI agent that can understand natural-language molecular biology requests and execute them as reproducible sequence-engineering workflows, while integrating with SnapGene for visualization and SnapGene-specific GUI operations.
 
+## Project Concept
+
+DNAmaker is an AI copilot for plasmid engineering that turns a scientist's intent into a validated, laboratory-ready design workflow. A researcher can describe a goal in plain language—replace a gene, add a promoter, choose an assembly strategy, design primers, or check a construct—and DNAmaker coordinates the sequence operations, biological checks, and SnapGene output automatically. By transforming hours of manual clicking and error-prone sequence handling into a fast, traceable, and reproducible process, DNAmaker can help biotechnology teams test more designs, catch costly mistakes before they reach the bench, and move promising medicines from idea to experiment faster.
+
+## Why DNAmaker
+
+Plasmids are foundational working materials across much of biotechnology. Products as different as recombinant peptide medicines such as Ozempic and mRNA vaccines depend on recombinant-DNA workflows in which optimized plasmids can serve as expression constructs, production intermediates, or DNA templates. Before a product reaches manufacturing, scientists often need to build and test many plasmid designs, optimizing elements such as promoters, coding sequences, regulatory regions, selectable markers, and cloning junctions.
+
+DNA-design tools such as SnapGene are powerful, but their workflows are centered on a person operating a graphical interface. Creating a new construct can require hours of manually inspecting maps and annotations, copying sequences, choosing an assembly strategy, designing primers, checking restriction sites and reading frames, simulating the build, and validating the final result. Those steps are repetitive, easy to perform inconsistently, and difficult to reproduce when the decisions exist only in clicks or informal notes.
+
+DNAmaker turns a natural-language design request into a structured, reproducible workflow. It is intended to:
+
+- reduce the time required to plan and build a new plasmid;
+- automate routine sequence editing, annotation, primer design, and assembly simulation;
+- detect problems such as unwanted restriction sites, invalid junctions, frame disruptions, and inconsistent annotations before laboratory work begins;
+- validate the completed construct rather than relying only on visual inspection;
+- preserve the inputs, operations, checks, and outputs as a traceable record; and
+- generate standard sequence files and use SnapGene for visualization and SnapGene-specific operations when useful.
+
+The result is a faster path from design intent to a validated plasmid file, with fewer manual steps and a workflow that another scientist can inspect and reproduce.
+
 The goal is **not to recreate SnapGene**. Instead, we combine:
 
 1. **An AI agent** for planning and executing workflows.
