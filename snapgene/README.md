@@ -10,6 +10,7 @@ From the repository root, in PowerShell:
 
 ```powershell
 $env:DNA_MAKER_SNAPGENE_ADAPTER = 'snapgene.adapter:create_service'
+$env:DNA_MAKER_BIOLOGY_ADAPTER = 'dnamaker.service:create_biology_adapter'
 $env:SNAPGENE_EXE = 'C:\Program Files\SnapGene\SnapGene.exe'
 # Optional when launching from another directory:
 $env:DNA_MAKER_WORKSPACE = (Get-Location).Path
@@ -66,7 +67,8 @@ No automatic retries for GUI actions. Resolve a busy app/dialog before retrying.
 
 ## Additional local utilities
 
-These do not change the shared two-method contract:
+`export` is a local utility. `render_map` is now part of the shared contract and
+is exposed by the workflow manager through `snapgene_render`:
 
 ```python
 gb = service.export(source_dna, output_path='artifacts/input.gb', output_format='genbank')
@@ -93,6 +95,35 @@ status 1 on a handled error. It is for trusted local use, not an agent validatio
 
 ## Verification
 
+### Complete Windows vertical slice
+
+Close SnapGene normally, then run from the repository root:
+
+```powershell
+uv sync --frozen
+.venv/Scripts/python -m snapgene.vertical_slice
+```
+
+The runner loads the real biology and SnapGene factories through the existing
+bootstrap. It reads `inputs/pEGFP-N1.gb`, adds a `misc_feature` annotation named
+`MVP integration verified` at `[590, 671)` on strand `1`, validates, saves GenBank,
+converts to `.dna`, renders PNG, and opens the exact converted artifact last.
+Because `save_construct` does not update the current reference, the runner reads
+and revalidates the saved GenBank before conversion. No validation gate is bypassed.
+
+Each run creates `artifacts/vertical-slice-<timestamp>-<id>/` containing the
+GenBank, SnapGene, PNG, an independent round-trip GenBank check,
+`workflow_status.json`, and `verification.json`. Verification checks the unchanged
+source hash, unchanged sequence, added annotation, preserved topology, feature
+types/locations/labels, and PNG dimensions. Use `--no-open` for an artifact-only run.
+
+Verified on September 12, 2026 with SnapGene 8.2.2: all steps passed; 4,733 bp,
+circular, 14 features, 1,073 × 934 PNG. This is an **annotation mutation** vertical
+slice, not a sequence replacement or Gibson simulation. The fixture's EGFP CDS
+has multiple location parts, which the current biology replacement method rejects.
+
+### Component tests
+
 ```powershell
 python -m unittest discover -s tests -v
 # Real SnapGene test: close SnapGene first. Creates unique artifact directories.
@@ -112,14 +143,11 @@ file interchange, not EGFP replacement or Gibson assembly.
 
 - Person 2: use the exported GenBank fixtures; provide a validated GenBank result.
   Do sequence edits and 0-based/end-exclusive coordinate handling in biology.
-- Person 3: factory is ready. Validation is enforced by the workflow manager,
-  because `ConstructRef` has no validation state. At the baseline main commit
-  `84dbff8`, `snapgene_open` bypasses that gate: add validation and provenance
-  checks before exposing it to the agent. Pass the reference returned by
-  `snapgene_convert`; conversion does not update `current_construct`.
-- Map export is available locally. To expose it as an agent tool, Person 3 must
-  add its tool definition, validation gate and JSON-serializable workflow log
-  entry. Do not hide map creation inside `convert` or change its return shape.
+- Person 3: factory is ready. The current workflow manager enforces validation
+  and converted-artifact provenance before rendering/opening. Use
+  `snapgene_convert`, `snapgene_render`, then `snapgene_open` in that order.
+  The successful vertical slice exercises these real methods and retains their
+  JSON-serializable workflow log. Conversion does not update `current_construct`.
 - PCR, Gibson/Golden Gate GUI workflows and sequence editing are deferred by the
   agreed MVP plan. There are no placeholder methods claiming these operations work.
 

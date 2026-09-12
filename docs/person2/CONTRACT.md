@@ -134,6 +134,9 @@ linear.
 - Zero matches and multiple matches are errors requiring caller input.
 - The target feature's `[start, end)` interval is replaced with
   `replacement_sequence`.
+- Adjacent joined segments are normalized to their enclosing interval for this
+  edit (as in the SnapGene-exported EGFP feature); genuinely non-contiguous or
+  origin-spanning target locations remain unsupported.
 - Features wholly downstream shift by the sequence-length delta.
 - A partially overlapping unrelated feature is rejected rather than silently
   moved or truncated.
