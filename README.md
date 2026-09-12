@@ -270,6 +270,36 @@ The final system should allow a user to describe complex molecular-biology tasks
 
 The system should be **modular, reproducible, testable, and independent of SnapGene wherever possible**.
 
+## MVP MCP server
+
+Person 3's MVP lives in `agent/`. It exposes an MCP server to Codex and keeps
+the host model responsible for natural-language planning while the server owns
+typed tools, validation gates, and the reproducible operation log.
+
+Install the project dependencies and run the server over stdio:
+
+```bash
+python -m venv .venv
+.venv/bin/python -m pip install -e .
+.venv/bin/dna-maker-mcp
+```
+
+See [CONTRACT.md](CONTRACT.md) for the adapter contract and
+[`agent/prompts/codex_instructions.md`](agent/prompts/codex_instructions.md) for
+the tool-use policy. The server intentionally returns `biology_unavailable` or
+`snapgene_unavailable` until the two component owners inject their adapters.
+
+For integration, each component owner exposes a zero-argument factory and the
+MCP process is started with these environment variables:
+
+```bash
+DNA_MAKER_BIOLOGY_ADAPTER='biology.adapter:create_service'
+DNA_MAKER_SNAPGENE_ADAPTER='snapgene.adapter:create_service'
+```
+
+The factories must return implementations of the interfaces in
+[`agent/adapters.py`](agent/adapters.py).
+
 ---
 
 ## SnapGene Demo Prompts
