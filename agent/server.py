@@ -46,7 +46,7 @@ def _run(callable_: Any) -> dict[str, Any]:
         return {"ok": True, "result": callable_()}
     except WorkflowError as error:
         return error.to_dict()
-    except Exception as error:  # adapters must not crash the MCP transport
+    except Exception as error:  # noqa: BLE001 - adapters must not crash the MCP transport
         return WorkflowError("adapter_error", str(error)).to_dict()
 
 
