@@ -6,16 +6,18 @@ import shutil
 import sys
 from pathlib import Path
 
+from Bio import SeqIO
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-FIXTURES = Path(__file__).parent / "fixtures"
+PROJECT_ROOT = Path(__file__).parent.parent
 
 
 def test_codex_mcp_stdio_vertical_slice(tmp_path: Path) -> None:
     inputs = tmp_path / "inputs"
     inputs.mkdir()
-    shutil.copy2(FIXTURES / "mini_construct.gb", inputs / "mini_construct.gb")
+    shutil.copy2(PROJECT_ROOT / "inputs/pEGFP-N1.gb", inputs / "pEGFP-N1.gb")
+    mCherry = SeqIO.read(PROJECT_ROOT / "inputs/mCherry.gb", "genbank")
 
     async def run() -> None:
         environment = os.environ.copy()
@@ -45,7 +47,7 @@ def test_codex_mcp_stdio_vertical_slice(tmp_path: Path) -> None:
 
                 read_result = await session.call_tool(
                     "read_construct",
-                    {"workflow_id": workflow_id, "path": "inputs/mini_construct.gb"},
+                    {"workflow_id": workflow_id, "path": "inputs/pEGFP-N1.gb"},
                 )
                 assert read_result.structuredContent["ok"] is True
 
@@ -70,9 +72,9 @@ def test_codex_mcp_stdio_vertical_slice(tmp_path: Path) -> None:
                     "replace_region",
                     {
                         "workflow_id": workflow_id,
-                        "target": "target",
-                        "replacement_sequence": "CCCC",
-                        "replacement_name": "replacement",
+                        "target": "EGFP",
+                        "replacement_sequence": str(mCherry.seq),
+                        "replacement_name": "mCherry",
                     },
                 )
                 validation = await session.call_tool(

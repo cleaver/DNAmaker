@@ -75,13 +75,19 @@ class BiologyServiceAdapter:
 
         target_index = matches[0]
         target_feature = loaded.features[target_index]
-        if len(target_feature.locations()) != 1:
+        target_locations = target_feature.locations()
+        if len(target_locations) != 1 and not _is_contiguous_feature(target_locations):
             raise BiologyError(
                 "unsupported_location",
-                "Origin-spanning target features are not supported by the MVP.",
+                "Non-contiguous or origin-spanning target features are not supported by the MVP.",
                 {"target": target},
             )
-        start, end = target_feature.start, target_feature.end
+        # SnapGene can export one biological feature as adjacent joined
+        # segments (for example EGFP in pEGFP-N1). Treat that representation as
+        # the equivalent single interval for replacement, while continuing to
+        # reject genuine gaps and origin-spanning locations.
+        start = min(part.start for part in target_locations)
+        end = max(part.end for part in target_locations)
         if not (0 <= start < end <= len(loaded.sequence)):
             raise BiologyError(
                 "invalid_feature_location",
@@ -258,4 +264,14 @@ def _is_whole_construct_source(feature: Feature, sequence_length: int) -> bool:
         and feature.parts is None
         and feature.start == 0
         and feature.end == sequence_length
+    )
+
+
+def _is_contiguous_feature(locations: list) -> bool:
+    if len(locations) < 2:
+        return True
+    ordered = sorted(locations, key=lambda location: location.start)
+    return all(
+        current.start < current.end and current.end == following.start
+        for current, following in zip(ordered, ordered[1:])
     )
