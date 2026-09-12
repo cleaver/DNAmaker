@@ -48,6 +48,19 @@ class WorkflowManager:
         result = self.biology.replace_region(session.current_construct, target=target, replacement_sequence=replacement_sequence, replacement_name=replacement_name)
         return self._mutation(session, "replace_region", {"target": target, "replacement_sequence": replacement_sequence, "replacement_name": replacement_name}, result)
 
+    def gibson_assemble(
+        self, workflow_id: str, *, fragments: list[ConstructRef], overlaps: list[int],
+        name: str, circular: bool = True, min_overlap: int = 15,
+    ) -> dict:
+        session = self.get(workflow_id)
+        result = self.biology.gibson_assemble(fragments, overlaps=overlaps, name=name,
+                                             circular=circular, min_overlap=min_overlap)
+        return self._mutation(session, "gibson_assemble", {
+            "fragments": [fragment.to_dict() for fragment in fragments],
+            "overlaps": overlaps, "name": name, "circular": circular,
+            "min_overlap": min_overlap,
+        }, result)
+
     def add_annotation(self, workflow_id: str, *, name: str, feature_type: str, start: int, end: int, strand: int) -> dict:
         session = self._require_construct(workflow_id)
         result = self.biology.add_annotation(session.current_construct, name=name, feature_type=feature_type, start=start, end=end, strand=strand)

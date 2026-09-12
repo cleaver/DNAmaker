@@ -325,3 +325,58 @@ directory when needed.
 5. “Open `pEGFP-N1.dna`, replace the complete EGFP CDS with `tdTomato.dna` using Gibson assembly, annotate the new CDS, save it as `pEGFP-N1-tdTomato.dna`, and export a plasmid map.”
 
 These are demonstration tasks. The agent should preserve feature orientation, reading frame, start and stop codons, and surrounding vector elements.
+
+## Gibson assembly without SnapGene
+
+A local MVP simulates the product of **ordered, pre-oriented linear fragments
+with exact, pre-existing overlaps**. It checks every junction, removes duplicate
+overlap sequence, maps annotations (including across the circular origin), and
+writes a GenBank product with junction annotations and provenance. It does not
+design primers, choose fragment order/orientation, or predict experimental yield.
+
+Run the self-contained synthetic presentation demo:
+
+```sh
+uv run python -m dnamaker.gibson_demo
+```
+
+It creates a fresh `artifacts/gibson-demo-*/` directory containing input GenBank
+files, `assembled.gb`, `verification.json`, and `workflow.json`. The independently
+checked result is 160 bp: 110 bp vector + 90 bp insert − two 20 bp overlaps.
+If launching Python from an AppImage shell causes interpreter issues, use
+`env -u APPIMAGE .venv/bin/python -m dnamaker.gibson_demo`.
+
+For the MCP server on Linux, only the biology adapter is required:
+
+```sh
+DNA_MAKER_BIOLOGY_ADAPTER=dnamaker.service:create_biology_adapter uv run dna-maker-mcp
+```
+
+Call `start_workflow`, then `gibson_assemble` with these arguments (substitute
+actual workspace-relative fragment paths and the returned workflow ID):
+
+```json
+{
+  "workflow_id": "<returned ID>",
+  "fragments": [
+    {"path": "inputs/linear_vector.gb", "format": "genbank"},
+    {"path": "inputs/overlapped_insert.gb", "format": "genbank"}
+  ],
+  "overlaps": [20, 20],
+  "name": "assembled_product",
+  "circular": true,
+  "min_overlap": 15
+}
+```
+
+Overlap `i` is the suffix of fragment `i` matching the prefix of the next fragment.
+Circular products need one overlap per fragment, including last-to-first closure;
+linear products need one fewer. Explicit lengths resolve the intended junction
+when repeated sequence offers several matches; the engine does not check for
+alternative experimental assemblies. Each fragment must contribute sequence
+outside its two overlaps. Inputs must contain only A/C/G/T and be linear.
+The default minimum is a software acceptance threshold, not an efficiency guarantee.
+
+After assembly, call `validate_construct`, then `save_construct`. Assembly creates
+a new artifact, resets prior validation, and logs the inputs and overlap settings.
+SnapGene actions return `snapgene_unavailable` when no SnapGene adapter is configured.

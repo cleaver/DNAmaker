@@ -82,6 +82,22 @@ def replace_region(workflow_id: str, target: str, replacement_sequence: str, rep
 
 
 @mcp.tool()
+def gibson_assemble(
+    workflow_id: str, fragments: list[ConstructRef], overlaps: list[int], name: str,
+    circular: bool = True, min_overlap: int = 15,
+) -> dict[str, Any]:
+    """Simulate Gibson from ordered, oriented linear fragments with exact overlaps.
+
+    Supply n overlaps for n circular fragments, n-1 for linear. Last circular
+    overlap joins last to first. No primer design or orientation inference.
+    Returns a new GenBank product; call validate_construct before saving.
+    """
+    return _run(lambda: manager.gibson_assemble(
+        workflow_id, fragments=fragments, overlaps=overlaps, name=name,
+        circular=circular, min_overlap=min_overlap))
+
+
+@mcp.tool()
 def add_annotation(workflow_id: str, name: str, feature_type: str, start: int, end: int, strand: int = 1) -> dict[str, Any]:
     """Add a feature using 0-based, end-exclusive coordinates; validate afterwards."""
     return _run(lambda: manager.add_annotation(workflow_id, name=name, feature_type=feature_type, start=start, end=end, strand=strand))
