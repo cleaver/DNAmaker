@@ -11,3 +11,4 @@ Scope: pre-oriented linear fragments, explicit overlap lengths, no primer design
 - Full-repository lint exposed two existing test style violations; fixed and rechecked with the exact CI command.
 
 5. Merge latest main, preserve both documentation changes, build and verify — complete.
+6. Audit and fix remaining uppercase boundaries and verification comparisons — complete; regression tests pass.

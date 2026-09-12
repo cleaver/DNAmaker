@@ -12,6 +12,9 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'outputs/demo5-fragments'
 sources = [ROOT / 'inputs/pEGFP-N1.gb', ROOT / 'inputs/mCherry.gb']
 v, d = [SeqIO.read(p, 'genbank') for p in sources]
+# Normalize source bases too: product-only normalization breaks feature comparisons.
+for record in (v, d):
+    record.seq = record.seq.upper()
 egfp, = [f for f in v.features if f.type == 'CDS' and f.qualifiers.get('label') == ['EGFP']]
 cherry, = [f for f in d.features if f.type == 'CDS' and f.qualifiers.get('label') == ['mCherry']]
 a, b = int(egfp.location.start), int(egfp.location.end)
