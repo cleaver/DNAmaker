@@ -31,6 +31,16 @@ DNA_MAKER_BIOLOGY_ADAPTER=dnamaker.service:create_biology_adapter
 The adapter will not import, launch, or require SnapGene. `snapgene` artifacts
 remain Person 1's responsibility.
 
+The zero-argument factory reads these optional settings:
+
+```text
+DNA_MAKER_WORKSPACE=/path/to/shared/workspace
+DNA_MAKER_BIOLOGY_ARTIFACT_DIR=artifacts/biology
+```
+
+Without them it uses the MCP process working directory and
+`artifacts/biology/`. Both paths must resolve inside the workspace.
+
 ## Artifact and path semantics
 
 - `ConstructRef.path` is relative to the configured MCP workspace, as defined
@@ -84,6 +94,10 @@ Feature:
   `/note` are preserved as qualifiers rather than silently discarded.
 - Validation checks bounds and strand values. General feature overlap is
   allowed because biologically meaningful annotations can overlap.
+- The canonical whole-construct `source` feature is structural metadata: a
+  sequence mutation resizes it to the new construct length. Other overlapping
+  features follow the replacement rules below and are rejected when their
+  bases would be removed or moved ambiguously.
 
 ## Adapter method semantics
 
