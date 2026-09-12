@@ -7,10 +7,10 @@ the resulting document open. Close SnapGene yourself before running.
 import hashlib
 import json
 import os
-from pathlib import Path
 import re
 import struct
 import unittest
+from pathlib import Path
 from uuid import uuid4
 
 from agent.models import ConstructRef

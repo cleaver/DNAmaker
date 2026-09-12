@@ -46,7 +46,7 @@ def _run(callable_: Any) -> dict[str, Any]:
         return {"ok": True, "result": callable_()}
     except WorkflowError as error:
         return error.to_dict()
-    except Exception as error:  # adapters must not crash the MCP transport
+    except Exception as error:  # noqa: BLE001 - adapters must not crash the MCP transport
         # BiologyError and SnapGene's domain errors intentionally remain
         # ordinary exceptions at the adapter boundary. Preserve their stable
         # code/message/details when translating them to MCP JSON.
