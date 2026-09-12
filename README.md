@@ -294,6 +294,12 @@ See [CONTRACT.md](CONTRACT.md) for the adapter contract and
 the tool-use policy. The server intentionally returns `biology_unavailable` or
 `snapgene_unavailable` until the two component owners inject their adapters.
 
+For the complete setup, tool reference, deterministic/manual usage, Codex
+configuration, Windows SnapGene runbook, and troubleshooting guide, see
+[`MCP_MANUAL.md`](MCP_MANUAL.md).
+
+For the shortest usage guide, see [`MCP_QUICKSTART.md`](MCP_QUICKSTART.md).
+
 For integration, each component owner exposes a zero-argument factory and the
 MCP process is started with these environment variables:
 
@@ -314,17 +320,26 @@ directory when needed.
 
 ## SnapGene Demo Prompts
 
-1. “Open `pEGFP-N1.dna`, replace the complete EGFP CDS with the CDS from `mCherry.dna` using Gibson assembly, annotate mCherry, identify all EcoRI sites, save the result as `pEGFP-N1-mCherry.dna`, and export a plasmid map.”
+### 1. Replace EGFP with mCherry
 
-2. “Open `pUC19.dna` and insert `GFP.dna` into the multiple cloning site using Gibson assembly. Annotate the GFP CDS, save the construct as `pUC19-GFP.dna`, and export a plasmid map.”
+> Read inputs/pEGFP-N1.gb. Read the mCherry CDS sequence from inputs/mCherry.gb in the workspace and use it to replace
+> the EGFP feature, labeling the replacement mCherry. Scan for EcoRI sites and validate. Save as outputs/demo1-mCherry.gb,
+> reload and revalidate that saved file, convert to outputs/demo1-mCherry.dna, export outputs/demo1-mCherry.png,
+> and open the converted file last. Report artifact paths and any errors. This is direct sequence
+> replacement, not Gibson assembly.
 
-3. “Open `pET-28a(+).dna` and insert `mTagBFP2.dna` using Gibson assembly while preserving the N-terminal 6xHis tag and reading frame. Save it as `pET-28a-mTagBFP2.dna` and export a plasmid map.”
+### 2. Annotate without changing the sequence
 
-4. “Open `pcDNA3.1(+).dna` and insert `Citrine.dna` downstream of the CMV promoter using Gibson assembly. Annotate the Citrine CDS, save it as `pcDNA3.1-Citrine.dna`, and export a plasmid map.”
+> Read inputs/pEGFP-N1.gb. Add a forward-strand misc_feature named “Demo annotation” at zero-based, end-exclusive
+> coordinates [590, 671), without changing the DNA sequence. Validate, save as outputs/demo2-annotated.gb, reload and
+> revalidate, convert to outputs/demo2-annotated.dna, export outputs/demo2-annotated.png, and open the converted file
+> last.
 
-5. “Open `pEGFP-N1.dna`, replace the complete EGFP CDS with `tdTomato.dna` using Gibson assembly, annotate the new CDS, save it as `pEGFP-N1-tdTomato.dna`, and export a plasmid map.”
+### 3. Inspect without modifying
 
-These are demonstration tasks. The agent should preserve feature orientation, reading frame, start and stop codons, and surrounding vector elements.
+> Read inputs/pEGFP-N1.gb. Report its length, topology, and annotated features. Find EcoRI and BamHI restriction
+> sites, clearly stating the coordinate convention. Run validation and report each check, then show the workflow
+> status. Do not modify, save, or open any files.
 
 ## Gibson assembly without SnapGene
 

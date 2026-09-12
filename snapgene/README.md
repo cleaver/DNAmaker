@@ -119,8 +119,51 @@ types/locations/labels, and PNG dimensions. Use `--no-open` for an artifact-only
 
 Verified on September 12, 2026 with SnapGene 8.2.2: all steps passed; 4,733 bp,
 circular, 14 features, 1,073 × 934 PNG. This is an **annotation mutation** vertical
-slice, not a sequence replacement or Gibson simulation. The fixture's EGFP CDS
-has multiple location parts, which the current biology replacement method rejects.
+slice, not a sequence replacement or Gibson simulation. The latest biology adapter
+also supports the fixture's adjacent joined EGFP segments; see the real MCP run below.
+
+### Real MCP server with both adapters
+
+Close SnapGene normally, then run:
+
+```powershell
+.venv/Scripts/python -m snapgene.mcp_vertical_slice
+```
+
+To use the acceptance request's exact filenames:
+
+```powershell
+.venv/Scripts/python -m snapgene.mcp_vertical_slice --output-prefix outputs/pEGFP-N1-mCherry
+```
+
+This creates `outputs/pEGFP-N1-mCherry.gb`, `.dna`, and `.png`. The runner rejects
+existing output files; choose another prefix for subsequent runs. Diagnostic
+logs remain in a unique `artifacts/mcp-live-.../` directory.
+
+This launches `python -m agent.server` as a real stdio MCP subprocess configured
+with `dnamaker.service:create_biology_adapter` and `snapgene.adapter:create_service`.
+It inspects both `inputs/pEGFP-N1.gb` and `inputs/mCherry.gb` through MCP, replaces
+the EGFP region using the donor CDS, scans EcoRI, validates, saves GenBank,
+reloads and revalidates that file, converts, renders, and opens via MCP tools.
+It independently reads the saved GenBank and `.dna` to check sequence/flanks,
+mCherry coordinates and orientation, circular topology, unchanged input hashes,
+and the exported PNG signature/dimensions. It does not simulate Gibson assembly.
+
+Outputs are under `artifacts/mcp-live-<timestamp>-<id>/`: `.gb`, `.dna`, `.png`,
+`mcp_calls.json`, `workflow_status.json`, `verification.json`, and `server.stderr.log`.
+The MCP server process is stopped after the test; the SnapGene document stays open.
+
+Verified against main `f08d60f` on September 12, 2026: real MCP replacement,
+conversion, rendering, and opening passed without adapter errors. Result: 4,724 bp,
+circular; mCherry `[678, 1389)` on strand `1`; PNG 1,121 × 934.
+That run reported a stale EGFP `/translation` qualifier on the replacement.
+Main `77fc02a` removes inherited translation and other outdated replacement
+metadata; this updated version has not yet been live-retested on Windows.
+The runner checks for stale metadata and reports warnings; it does not certify
+biological completeness. The handoff procedure is documented in
+[`docs/person2/HANDOFF.md`](../docs/person2/HANDOFF.md).
+The installed MCP/Pydantic combination also emits a non-blocking `lifespan`
+forward-reference warning at startup, retained in the stderr log.
 
 ### Component tests
 

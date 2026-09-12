@@ -7,5 +7,7 @@ Scope: pre-oriented linear fragments, explicit overlap lengths, no primer design
 ## Errors encountered
 - AppImage launcher redirected Python executable discovery; run with APPIMAGE unset or via uv.
 - Lint found unused test imports/import ordering; fixed with ruff.
-4. Diagnose and fix PR CI lint failures — complete locally; await remote CI.
+4. Diagnose and fix PR CI lint failures — complete; remote CI passed.
 - Full-repository lint exposed two existing test style violations; fixed and rechecked with the exact CI command.
+
+5. Merge latest main, preserve both documentation changes, build and verify — complete.
