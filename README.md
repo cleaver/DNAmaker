@@ -82,6 +82,9 @@ The canonical interchange format should be **GenBank plus a structured JSON repr
 
 Own everything that interacts directly with SnapGene.
 
+The Windows MVP adapter is implemented in [`snapgene/`](snapgene/README.md),
+including setup, CLI utilities, map export, live tests, and teammate handoffs.
+
 ### Responsibilities
 
 * SnapGene CLI wrapper
