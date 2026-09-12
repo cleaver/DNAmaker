@@ -1,0 +1,41 @@
+LOCUS       demo5_mCherry            761 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  Simulation fragment: 25 bp upstream backbone homology + complete
+            forward mCherry CDS + 25 bp downstream backbone homology; no primer
+            design..
+ACCESSION   demo5_mCherry
+VERSION     demo5_mCherry
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     source          26..736
+                     /mol_type="other DNA"
+                     /organism="synthetic DNA construct"
+     CDS             26..736
+                     /codon_start=1
+                     /product="monomeric derivative of DsRed fluorescent protein
+                     (Shaner et al., 2004)"
+                     /label="mCherry"
+                     /note="mammalian codon-optimized"
+                     /note="color: #ff0000"
+                     /translation="MVSKGEEDNMAIIKEFMRFKVHMEGSVNGHEFEIEGEGEGRPYEG
+                     TQTAKLKVTKGGPLPFAWDILSPQFMYGSKAYVKHPADIPDYLKLSFPEGFKWERVMNF
+                     EDGGVVTVTQDSSLQDGEFIYKVKLRGTNFPSDGPVMQKKTMGWEASSERMYPEDGALK
+                     GEIKQRLKLKDGGHYDAEVKTTYKAKKPVQLPGAYNVNIKLDITSHNEDYTIVEQYERA
+                     EGRHSTGGMDELYK"
+ORIGIN
+        1 ggcccgggat ccaccggtcg ccaccatggt gagcaagggc gaggaggata acatggccat
+       61 catcaaggag ttcatgcgct tcaaggtgca catggagggc tccgtgaacg gccacgagtt
+      121 cgagatcgag ggcgagggcg agggccgccc ctacgagggc acccagaccg ccaagctgaa
+      181 ggtgaccaag ggtggccccc tgcccttcgc ctgggacatc ctgtcccctc agttcatgta
+      241 cggctccaag gcctacgtga agcaccccgc cgacatcccc gactacttga agctgtcctt
+      301 ccccgagggc ttcaagtggg agcgcgtgat gaacttcgag gacggcggcg tggtgaccgt
+      361 gacccaggac tcctccctgc aggacggcga gttcatctac aaggtgaagc tgcgcggcac
+      421 caacttcccc tccgacggcc ccgtaatgca gaagaagacc atgggctggg aggcctcctc
+      481 cgagcggatg taccccgagg acggcgccct gaagggcgag atcaagcaga ggctgaagct
+      541 gaaggacggc ggccactacg acgctgaggt caagaccacc tacaaggcca agaagcccgt
+      601 gcagctgccc ggcgcctaca acgtcaacat caagttggac atcacctccc acaacgagga
+      661 ctacaccatc gtggaacagt acgaacgcgc cgagggccgc cactccaccg gcggcatgga
+      721 cgagctgtac aagtagagcg gccgcgactc tagatcataa t
+//

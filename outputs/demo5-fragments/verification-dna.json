@@ -1,0 +1,17 @@
+{
+  "path": "outputs\\demo5-gibson-mCherry.dna",
+  "length": 4724,
+  "mCherry_bases": [
+    4014,
+    4724
+  ],
+  "mCherry_protein_aa": 236,
+  "both_junctions_exact": true,
+  "complete_sequence_matches": true,
+  "unaffected_features_verified": 11,
+  "EcoRI_motif_starts_1based": [
+    3964
+  ],
+  "sources_unchanged": true,
+  "errors": []
+}

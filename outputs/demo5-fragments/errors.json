@@ -1,0 +1,1 @@
+{"unresolved_errors": [], "resolved_verification_errors": ["Initial independent SnapGene CDS comparison was case-sensitive and failed on lowercase storage. Normalized sequence case and reran all checks successfully; no sequence or artifact changes were needed."]}

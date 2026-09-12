@@ -1,0 +1,862 @@
+{
+  "ok": true,
+  "result": {
+    "workflow_id": "e6cc3a66-1732-4fc6-b18e-a929d8aa9bb0",
+    "request": "Demo5: replace complete EGFP CDS in inputs/pEGFP-N1.gb with complete oriented mCherry CDS from inputs/mCherry.gb using locally prepared linear simulation fragments, exact overlaps [25,25], circular product. Preserve unaffected annotations, verify, EcoRI scan, save/reload/validate, convert/render/open last; sources unchanged.",
+    "created_at": "2026-09-12T19:43:27.497034+00:00",
+    "current_construct": {
+      "path": "outputs/demo5-gibson-mCherry.gb",
+      "format": "genbank",
+      "name": "demo5-gibson-mCherry"
+    },
+    "validated_construct_path": "outputs/demo5-gibson-mCherry.gb",
+    "validated_construct": {
+      "path": "outputs/demo5-gibson-mCherry.gb",
+      "format": "genbank",
+      "name": "demo5-gibson-mCherry"
+    },
+    "snapgene_construct": {
+      "path": "outputs/demo5-gibson-mCherry.dna",
+      "format": "snapgene",
+      "name": "demo5-gibson-mCherry"
+    },
+    "snapgene_source_construct": {
+      "path": "outputs/demo5-gibson-mCherry.gb",
+      "format": "genbank",
+      "name": "demo5-gibson-mCherry"
+    },
+    "snapgene_map_path": "outputs/demo5-gibson-mCherry.png",
+    "operations": [
+      {
+        "name": "read_construct",
+        "input": {
+          "path": "inputs/pEGFP-N1.gb",
+          "format": "genbank",
+          "name": null
+        },
+        "output": {
+          "construct": {
+            "path": "inputs/pEGFP-N1.gb",
+            "format": "genbank",
+            "name": "pEGFP-N1"
+          },
+          "sequence_length": 4733,
+          "topology": "circular",
+          "features": [
+            {
+              "name": "source_0",
+              "type": "source",
+              "start": 0,
+              "end": 4733,
+              "strand": 1,
+              "qualifiers": {
+                "lab_host": [
+                  "Mammalian Cells"
+                ],
+                "mol_type": [
+                  "other DNA"
+                ],
+                "organism": [
+                  "synthetic DNA construct"
+                ]
+              }
+            },
+            {
+              "name": "CMV enhancer",
+              "type": "enhancer",
+              "start": 60,
+              "end": 364,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "CMV enhancer"
+                ],
+                "note": [
+                  "human cytomegalovirus immediate early enhancer",
+                  "color: #ffffff"
+                ]
+              }
+            },
+            {
+              "name": "CMV promoter",
+              "type": "promoter",
+              "start": 364,
+              "end": 568,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "CMV promoter"
+                ],
+                "note": [
+                  "human cytomegalovirus (CMV) immediate early promoter",
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "MCS",
+              "type": "misc_feature",
+              "start": 590,
+              "end": 671,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "MCS"
+                ],
+                "note": [
+                  "multiple cloning site of fluorescent protein plasmids",
+                  "color: #99ccff"
+                ]
+              }
+            },
+            {
+              "name": "EGFP",
+              "type": "CDS",
+              "start": 678,
+              "end": 1398,
+              "strand": 1,
+              "qualifiers": {
+                "codon_start": [
+                  "1"
+                ],
+                "product": [
+                  "enhanced GFP"
+                ],
+                "label": [
+                  "EGFP"
+                ],
+                "note": [
+                  "mammalian codon-optimized",
+                  "This feature has 3 segments: 1:  679 ..  681 / #05fd14 2:  682 ..  684 / #05fd14 / 1a 3:  685 .. 1398 / #05fd14"
+                ],
+                "translation": [
+                  "MVSKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLTYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYNSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITLGMDELYK"
+                ]
+              },
+              "parts": [
+                {
+                  "start": 678,
+                  "end": 681
+                },
+                {
+                  "start": 681,
+                  "end": 684
+                },
+                {
+                  "start": 684,
+                  "end": 1398
+                }
+              ]
+            },
+            {
+              "name": "SV40 poly(A) signal",
+              "type": "polyA_signal",
+              "start": 1520,
+              "end": 1642,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 poly(A) signal"
+                ],
+                "note": [
+                  "SV40 polyadenylation signal",
+                  "color: #a6acb3"
+                ]
+              }
+            },
+            {
+              "name": "f1 ori",
+              "type": "rep_origin",
+              "start": 1648,
+              "end": 2104,
+              "strand": -1,
+              "qualifiers": {
+                "direction": [
+                  "LEFT"
+                ],
+                "label": [
+                  "f1 ori"
+                ],
+                "note": [
+                  "f1 bacteriophage origin of replication; arrow indicates direction of (+) strand synthesis",
+                  "color: #ffff00"
+                ]
+              }
+            },
+            {
+              "name": "AmpR promoter",
+              "type": "promoter",
+              "start": 2130,
+              "end": 2235,
+              "strand": 1,
+              "qualifiers": {
+                "gene": [
+                  "bla"
+                ],
+                "label": [
+                  "AmpR promoter"
+                ],
+                "note": [
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "SV40 promoter",
+              "type": "promoter",
+              "start": 2236,
+              "end": 2594,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 promoter"
+                ],
+                "note": [
+                  "SV40 enhancer and early promoter",
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "SV40 ori",
+              "type": "rep_origin",
+              "start": 2444,
+              "end": 2580,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 ori"
+                ],
+                "note": [
+                  "SV40 origin of replication",
+                  "color: #ffff00"
+                ]
+              }
+            },
+            {
+              "name": "NeoR/KanR",
+              "type": "CDS",
+              "start": 2628,
+              "end": 3423,
+              "strand": 1,
+              "qualifiers": {
+                "codon_start": [
+                  "1"
+                ],
+                "gene": [
+                  "aph(3')-II (or nptII)"
+                ],
+                "product": [
+                  "aminoglycoside phosphotransferase from Tn5"
+                ],
+                "label": [
+                  "NeoR/KanR"
+                ],
+                "note": [
+                  "confers resistance to neomycin, kanamycin, and G418 (Geneticin)",
+                  "color: #ccffcc"
+                ],
+                "translation": [
+                  "MIEQDGLHAGSPAAWVERLFGYDWAQQTIGCSDAAVFRLSAQGRPVLFVKTDLSGALNELQDEAARLSWLATTGVPCAAVLDVVTEAGRDWLLLGEVPGQDLLSSHLAPAEKVSIMADAMRRLHTLDPATCPFDHQAKHRIERARTRMEAGLVDQDDLDEEHQGLAPAELFARLKASMPDGEDLVVTHGDACLPNIMVENGRFSGFIDCGRLGVADRYQDIALATRDIAEELGGEWADRFLVLYGIAAPDSQRIAFYRLLDEFF"
+                ]
+              }
+            },
+            {
+              "name": "HSV TK poly(A) signal",
+              "type": "misc_feature",
+              "start": 3654,
+              "end": 3702,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "HSV TK poly(A) signal"
+                ],
+                "note": [
+                  "herpesvirus thymidine kinase polyadenylation signal",
+                  "color: #a6acb3"
+                ]
+              }
+            },
+            {
+              "name": "ori",
+              "type": "rep_origin",
+              "start": 4030,
+              "end": 4619,
+              "strand": 1,
+              "qualifiers": {
+                "direction": [
+                  "RIGHT"
+                ],
+                "label": [
+                  "ori"
+                ],
+                "note": [
+                  "high-copy-number ColE1/pMB1/pBR322/pUC origin of replication",
+                  "color: #ffff00"
+                ]
+              }
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:43:42.448302+00:00"
+      },
+      {
+        "name": "read_construct",
+        "input": {
+          "path": "inputs/mCherry.gb",
+          "format": "genbank",
+          "name": null
+        },
+        "output": {
+          "construct": {
+            "path": "inputs/mCherry.gb",
+            "format": "genbank",
+            "name": "mCherry"
+          },
+          "sequence_length": 711,
+          "topology": "linear",
+          "features": [
+            {
+              "name": "source_0",
+              "type": "source",
+              "start": 0,
+              "end": 711,
+              "strand": 1,
+              "qualifiers": {
+                "mol_type": [
+                  "other DNA"
+                ],
+                "organism": [
+                  "synthetic DNA construct"
+                ]
+              }
+            },
+            {
+              "name": "mCherry",
+              "type": "CDS",
+              "start": 0,
+              "end": 711,
+              "strand": 1,
+              "qualifiers": {
+                "codon_start": [
+                  "1"
+                ],
+                "product": [
+                  "monomeric derivative of DsRed fluorescent protein (Shaner et al., 2004)"
+                ],
+                "label": [
+                  "mCherry"
+                ],
+                "note": [
+                  "mammalian codon-optimized",
+                  "color: #ff0000"
+                ],
+                "translation": [
+                  "MVSKGEEDNMAIIKEFMRFKVHMEGSVNGHEFEIEGEGEGRPYEGTQTAKLKVTKGGPLPFAWDILSPQFMYGSKAYVKHPADIPDYLKLSFPEGFKWERVMNFEDGGVVTVTQDSSLQDGEFIYKVKLRGTNFPSDGPVMQKKTMGWEASSERMYPEDGALKGEIKQRLKLKDGGHYDAEVKTTYKAKKPVQLPGAYNVNIKLDITSHNEDYTIVEQYERAEGRHSTGGMDELYK"
+                ]
+              }
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:43:44.982237+00:00"
+      },
+      {
+        "name": "gibson_assemble",
+        "input": {
+          "fragments": [
+            {
+              "path": "outputs/demo5-fragments/backbone-no-EGFP.gb",
+              "format": "genbank",
+              "name": null
+            },
+            {
+              "path": "outputs/demo5-fragments/mCherry-overlaps.gb",
+              "format": "genbank",
+              "name": null
+            }
+          ],
+          "overlaps": [
+            25,
+            25
+          ],
+          "name": "demo5-gibson-mCherry",
+          "circular": true,
+          "min_overlap": 15
+        },
+        "output": {
+          "construct": {
+            "path": "artifacts/biology/gibson-cb16dbcd3c194f82848d3172120bc1e8.gb",
+            "format": "genbank",
+            "name": "demo5-gibson-mCherry"
+          },
+          "validation_required": true
+        },
+        "destructive": true,
+        "created_at": "2026-09-12T19:45:04.237764+00:00"
+      },
+      {
+        "name": "find_restriction_sites",
+        "input": {
+          "enzyme": "EcoRI"
+        },
+        "output": {
+          "construct": {
+            "path": "artifacts/biology/gibson-cb16dbcd3c194f82848d3172120bc1e8.gb",
+            "format": "genbank",
+            "name": "demo5-gibson-mCherry"
+          },
+          "enzyme": "EcoRI",
+          "sites": [
+            {
+              "position": 3963,
+              "strand": 1,
+              "site": "GAATTC"
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:15.561705+00:00"
+      },
+      {
+        "name": "validate_construct",
+        "input": {},
+        "output": {
+          "valid": true,
+          "checks": [
+            {
+              "name": "sequence_alphabet",
+              "passed": true,
+              "details": {
+                "invalid_symbols": []
+              }
+            },
+            {
+              "name": "topology",
+              "passed": true,
+              "details": {
+                "topology": "circular"
+              }
+            },
+            {
+              "name": "feature_bounds",
+              "passed": true,
+              "details": {
+                "invalid_features": []
+              }
+            },
+            {
+              "name": "feature_strands",
+              "passed": true,
+              "details": {
+                "invalid_features": []
+              }
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:19.680945+00:00"
+      },
+      {
+        "name": "save_construct",
+        "input": {
+          "output_path": "outputs/demo5-gibson-mCherry.gb",
+          "output_format": "genbank"
+        },
+        "output": {
+          "construct": {
+            "path": "outputs/demo5-gibson-mCherry.gb",
+            "format": "genbank",
+            "name": "demo5-gibson-mCherry"
+          }
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:32.698647+00:00"
+      },
+      {
+        "name": "read_construct",
+        "input": {
+          "path": "outputs/demo5-gibson-mCherry.gb",
+          "format": "genbank",
+          "name": null
+        },
+        "output": {
+          "construct": {
+            "path": "outputs/demo5-gibson-mCherry.gb",
+            "format": "genbank",
+            "name": "demo5-gibson-mCherry"
+          },
+          "sequence_length": 4724,
+          "topology": "circular",
+          "features": [
+            {
+              "name": "source_0",
+              "type": "source",
+              "start": 0,
+              "end": 4013,
+              "strand": 1,
+              "qualifiers": {
+                "lab_host": [
+                  "Mammalian Cells"
+                ],
+                "mol_type": [
+                  "other DNA"
+                ],
+                "organism": [
+                  "synthetic DNA construct"
+                ],
+                "label": [
+                  "source_0"
+                ]
+              }
+            },
+            {
+              "name": "CMV enhancer",
+              "type": "enhancer",
+              "start": 3395,
+              "end": 3699,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "CMV enhancer"
+                ],
+                "note": [
+                  "human cytomegalovirus immediate early enhancer",
+                  "color: #ffffff"
+                ]
+              }
+            },
+            {
+              "name": "CMV promoter",
+              "type": "promoter",
+              "start": 3699,
+              "end": 3903,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "CMV promoter"
+                ],
+                "note": [
+                  "human cytomegalovirus (CMV) immediate early promoter",
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "MCS",
+              "type": "misc_feature",
+              "start": 3925,
+              "end": 4006,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "MCS"
+                ],
+                "note": [
+                  "multiple cloning site of fluorescent protein plasmids",
+                  "color: #99ccff"
+                ]
+              }
+            },
+            {
+              "name": "SV40 poly(A) signal",
+              "type": "polyA_signal",
+              "start": 122,
+              "end": 244,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 poly(A) signal"
+                ],
+                "note": [
+                  "SV40 polyadenylation signal",
+                  "color: #a6acb3"
+                ]
+              }
+            },
+            {
+              "name": "f1 ori",
+              "type": "rep_origin",
+              "start": 250,
+              "end": 706,
+              "strand": -1,
+              "qualifiers": {
+                "direction": [
+                  "LEFT"
+                ],
+                "label": [
+                  "f1 ori"
+                ],
+                "note": [
+                  "f1 bacteriophage origin of replication; arrow indicates direction of (+) strand synthesis",
+                  "color: #ffff00"
+                ]
+              }
+            },
+            {
+              "name": "AmpR promoter",
+              "type": "promoter",
+              "start": 732,
+              "end": 837,
+              "strand": 1,
+              "qualifiers": {
+                "gene": [
+                  "bla"
+                ],
+                "label": [
+                  "AmpR promoter"
+                ],
+                "note": [
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "SV40 promoter",
+              "type": "promoter",
+              "start": 838,
+              "end": 1196,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 promoter"
+                ],
+                "note": [
+                  "SV40 enhancer and early promoter",
+                  "color: #ffffff; direction: RIGHT"
+                ]
+              }
+            },
+            {
+              "name": "SV40 ori",
+              "type": "rep_origin",
+              "start": 1046,
+              "end": 1182,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "SV40 ori"
+                ],
+                "note": [
+                  "SV40 origin of replication",
+                  "color: #ffff00"
+                ]
+              }
+            },
+            {
+              "name": "NeoR/KanR",
+              "type": "CDS",
+              "start": 1230,
+              "end": 2025,
+              "strand": 1,
+              "qualifiers": {
+                "codon_start": [
+                  "1"
+                ],
+                "gene": [
+                  "aph(3')-II (or nptII)"
+                ],
+                "product": [
+                  "aminoglycoside phosphotransferase from Tn5"
+                ],
+                "label": [
+                  "NeoR/KanR"
+                ],
+                "note": [
+                  "confers resistance to neomycin, kanamycin, and G418 (Geneticin)",
+                  "color: #ccffcc"
+                ],
+                "translation": [
+                  "MIEQDGLHAGSPAAWVERLFGYDWAQQTIGCSDAAVFRLSAQGRPVLFVKTDLSGALNELQDEAARLSWLATTGVPCAAVLDVVTEAGRDWLLLGEVPGQDLLSSHLAPAEKVSIMADAMRRLHTLDPATCPFDHQAKHRIERARTRMEAGLVDQDDLDEEHQGLAPAELFARLKASMPDGEDLVVTHGDACLPNIMVENGRFSGFIDCGRLGVADRYQDIALATRDIAEELGGEWADRFLVLYGIAAPDSQRIAFYRLLDEFF"
+                ]
+              }
+            },
+            {
+              "name": "HSV TK poly(A) signal",
+              "type": "misc_feature",
+              "start": 2256,
+              "end": 2304,
+              "strand": 1,
+              "qualifiers": {
+                "label": [
+                  "HSV TK poly(A) signal"
+                ],
+                "note": [
+                  "herpesvirus thymidine kinase polyadenylation signal",
+                  "color: #a6acb3"
+                ]
+              }
+            },
+            {
+              "name": "ori",
+              "type": "rep_origin",
+              "start": 2632,
+              "end": 3221,
+              "strand": 1,
+              "qualifiers": {
+                "direction": [
+                  "RIGHT"
+                ],
+                "label": [
+                  "ori"
+                ],
+                "note": [
+                  "high-copy-number ColE1/pMB1/pBR322/pUC origin of replication",
+                  "color: #ffff00"
+                ]
+              }
+            },
+            {
+              "name": "source_0",
+              "type": "source",
+              "start": 4013,
+              "end": 4724,
+              "strand": 1,
+              "qualifiers": {
+                "mol_type": [
+                  "other DNA"
+                ],
+                "organism": [
+                  "synthetic DNA construct"
+                ],
+                "label": [
+                  "source_0"
+                ]
+              }
+            },
+            {
+              "name": "mCherry",
+              "type": "CDS",
+              "start": 4013,
+              "end": 4724,
+              "strand": 1,
+              "qualifiers": {
+                "codon_start": [
+                  "1"
+                ],
+                "product": [
+                  "monomeric derivative of DsRed fluorescent protein (Shaner et al., 2004)"
+                ],
+                "label": [
+                  "mCherry"
+                ],
+                "note": [
+                  "mammalian codon-optimized",
+                  "color: #ff0000"
+                ],
+                "translation": [
+                  "MVSKGEEDNMAIIKEFMRFKVHMEGSVNGHEFEIEGEGEGRPYEGTQTAKLKVTKGGPLPFAWDILSPQFMYGSKAYVKHPADIPDYLKLSFPEGFKWERVMNFEDGGVVTVTQDSSLQDGEFIYKVKLRGTNFPSDGPVMQKKTMGWEASSERMYPEDGALKGEIKQRLKLKDGGHYDAEVKTTYKAKKPVQLPGAYNVNIKLDITSHNEDYTIVEQYERAEGRHSTGGMDELYK"
+                ]
+              }
+            },
+            {
+              "name": "Gibson junction 1",
+              "type": "misc_feature",
+              "start": 3988,
+              "end": 4013,
+              "strand": 1,
+              "qualifiers": {
+                "note": [
+                  "Exact 25 bp overlap: demo5_backbone -> demo5_mCherry"
+                ],
+                "label": [
+                  "Gibson junction 1"
+                ]
+              }
+            },
+            {
+              "name": "Gibson junction 2",
+              "type": "misc_feature",
+              "start": 0,
+              "end": 25,
+              "strand": 1,
+              "qualifiers": {
+                "note": [
+                  "Exact 25 bp overlap: demo5_mCherry -> demo5_backbone"
+                ],
+                "label": [
+                  "Gibson junction 2"
+                ]
+              }
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:34.814828+00:00"
+      },
+      {
+        "name": "validate_construct",
+        "input": {},
+        "output": {
+          "valid": true,
+          "checks": [
+            {
+              "name": "sequence_alphabet",
+              "passed": true,
+              "details": {
+                "invalid_symbols": []
+              }
+            },
+            {
+              "name": "topology",
+              "passed": true,
+              "details": {
+                "topology": "circular"
+              }
+            },
+            {
+              "name": "feature_bounds",
+              "passed": true,
+              "details": {
+                "invalid_features": []
+              }
+            },
+            {
+              "name": "feature_strands",
+              "passed": true,
+              "details": {
+                "invalid_features": []
+              }
+            }
+          ]
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:37.897549+00:00"
+      },
+      {
+        "name": "snapgene_convert",
+        "input": {
+          "output_path": "outputs/demo5-gibson-mCherry.dna"
+        },
+        "output": {
+          "construct": {
+            "path": "outputs/demo5-gibson-mCherry.dna",
+            "format": "snapgene",
+            "name": "demo5-gibson-mCherry"
+          }
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:45:54.439073+00:00"
+      },
+      {
+        "name": "snapgene_render",
+        "input": {
+          "output_path": "outputs/demo5-gibson-mCherry.png",
+          "size": 1200
+        },
+        "output": {
+          "construct": {
+            "path": "outputs/demo5-gibson-mCherry.dna",
+            "format": "snapgene",
+            "name": "demo5-gibson-mCherry"
+          },
+          "map_path": "outputs/demo5-gibson-mCherry.png",
+          "size": 1200
+        },
+        "destructive": false,
+        "created_at": "2026-09-12T19:46:10.873026+00:00"
+      }
+    ]
+  }
+}

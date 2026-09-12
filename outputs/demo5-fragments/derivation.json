@@ -1,0 +1,43 @@
+{
+  "coordinate_convention": "1-based inclusive for reported coordinates",
+  "EGFP": {
+    "location": "join{[678:681](+), [681:684](+), [684:1398](+)}",
+    "bases": [
+      679,
+      1398
+    ],
+    "length": 720,
+    "complete_translation_verified": true
+  },
+  "mCherry": {
+    "bases": [
+      1,
+      711
+    ],
+    "length": 711,
+    "strand": "+",
+    "complete_translation_verified": true
+  },
+  "backbone_derivation": "pEGFP-N1[1399..4733] + pEGFP-N1[1..678], forward",
+  "insert_derivation": "pEGFP-N1[654..678] + mCherry CDS[1..711] + pEGFP-N1[1399..1423], forward",
+  "fragment_lengths": [
+    4013,
+    761
+  ],
+  "overlaps": [
+    25,
+    25
+  ],
+  "overlap_sequences_5to3": [
+    "GGCCCGGGATCCACCGGTCGCCACC",
+    "AGCGGCCGCGACTCTAGATCATAAT"
+  ],
+  "expected_product_length": 4724,
+  "product_origin": "pEGFP-N1 base 1399",
+  "source_annotation_handling": "Vector source retained over derived backbone; donor source retained over mCherry CDS. All 11 unaffected vector features retain qualifiers and extracted sequences.",
+  "source_sha256": {
+    "inputs\\pEGFP-N1.gb": "82ae297361aa838f62028857d87589f848ebff54b698a7e0b73a89cbc18b710d",
+    "inputs\\mCherry.gb": "262517259056909b022bb4df4f91e9c1380586bd635c4dea3ed9855ed3716d94"
+  },
+  "errors": []
+}
