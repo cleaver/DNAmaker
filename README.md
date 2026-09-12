@@ -298,6 +298,8 @@ For the complete setup, tool reference, deterministic/manual usage, Codex
 configuration, Windows SnapGene runbook, and troubleshooting guide, see
 [`MCP_MANUAL.md`](MCP_MANUAL.md).
 
+For the shortest usage guide, see [`MCP_QUICKSTART.md`](MCP_QUICKSTART.md).
+
 For integration, each component owner exposes a zero-argument factory and the
 MCP process is started with these environment variables:
 
