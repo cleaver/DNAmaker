@@ -269,14 +269,23 @@ def test_real_adapter_runs_through_workflow_manager(tmp_path: Path) -> None:
     adapter = BiologyServiceAdapter(tmp_path)
 
     class FakeSnapGene:
+        def __init__(self):
+            self.converted = []
+            self.opened = []
+
         def convert(self, construct: ConstructRef, *, output_path: str) -> ConstructRef:
+            self.converted.append(construct)
             return ConstructRef(output_path, "snapgene", construct.name)
 
+        def render_map(self, construct: ConstructRef, *, output_path: str, size: int = 1200) -> str:
+            return output_path
+
         def open(self, construct: ConstructRef) -> None:
-            return None
+            self.opened.append(construct)
 
     input_path = copy_fixture(tmp_path, "mini_construct.gb")
-    manager = WorkflowManager(adapter, FakeSnapGene())
+    snapgene = FakeSnapGene()
+    manager = WorkflowManager(adapter, snapgene)
     workflow = manager.start("Replace target and export it")
     manager.read_construct(workflow.id, ConstructRef(input_path, "genbank"))
     mutation = manager.replace_region(
@@ -295,10 +304,20 @@ def test_real_adapter_runs_through_workflow_manager(tmp_path: Path) -> None:
     saved = manager.save_construct(
         workflow.id, output_path="outputs/result.gb", output_format="genbank"
     )
+    converted = manager.snapgene_convert(
+        workflow.id, output_path="outputs/result.dna"
+    )
+    manager.snapgene_open(workflow.id)
 
     assert mutation["validation_required"] is True
     assert validation["valid"] is True
     assert saved["construct"]["path"] == "outputs/result.gb"
+    assert snapgene.converted[0].format == "genbank"
+    assert snapgene.converted[0].path == mutation["construct"]["path"]
+    assert converted["construct"]["format"] == "snapgene"
+    assert [reference.to_dict() for reference in snapgene.opened] == [
+        converted["construct"]
+    ]
 
 
 def test_factory_reads_workspace_configuration(

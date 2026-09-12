@@ -31,8 +31,14 @@ class WorkflowManager:
     def read_construct(self, workflow_id: str, construct: ConstructRef) -> dict:
         session = self.get(workflow_id)
         summary = self.biology.read_construct(construct)
-        session.current_construct = construct
+        # Use the adapter's normalized reference (including the construct
+        # name and canonical format) for all later provenance checks.
+        session.current_construct = summary.construct
         session.validated_construct_path = None
+        session.validated_construct = None
+        session.snapgene_construct = None
+        session.snapgene_source_construct = None
+        session.snapgene_map_path = None
         result = summary.to_dict()
         self._record(session, "read_construct", construct.to_dict(), result, destructive=False)
         return result
@@ -56,11 +62,18 @@ class WorkflowManager:
 
     def validate_construct(self, workflow_id: str) -> dict:
         session = self._require_construct(workflow_id)
+        # A fresh validation is the only authority for downstream actions;
+        # discard any older SnapGene artifact before checking the construct.
+        session.snapgene_construct = None
+        session.snapgene_source_construct = None
+        session.snapgene_map_path = None
         result = self.biology.validate_construct(session.current_construct).to_dict()
         if result["valid"]:
             session.validated_construct_path = session.current_construct.path
+            session.validated_construct = session.current_construct
         else:
             session.validated_construct_path = None
+            session.validated_construct = None
         self._record(session, "validate_construct", {}, result, destructive=False)
         return result
 
@@ -73,14 +86,45 @@ class WorkflowManager:
 
     def snapgene_convert(self, workflow_id: str, *, output_path: str) -> dict:
         session = self._require_validated_construct(workflow_id)
+        if session.current_construct.format != "genbank":
+            raise WorkflowError(
+                "genbank_required",
+                "SnapGene integration requires a validated GenBank ConstructRef.",
+                {"format": session.current_construct.format},
+            )
         converted = self.snapgene.convert(session.current_construct, output_path=output_path)
+        if converted.format != "snapgene":
+            raise WorkflowError(
+                "invalid_snapgene_reference",
+                "SnapGene conversion must return a ConstructRef with format='snapgene'.",
+                {"format": converted.format},
+            )
+        session.snapgene_construct = converted
+        session.snapgene_source_construct = session.current_construct
+        session.snapgene_map_path = None
         result = {"construct": converted.to_dict()}
         self._record(session, "snapgene_convert", {"output_path": output_path}, result, destructive=False)
         return result
 
-    def snapgene_open(self, workflow_id: str, *, path: str, format: str = "snapgene") -> dict:
-        session = self.get(workflow_id)
-        construct = ConstructRef(path=path, format=format)  # type: ignore[arg-type]
+    def snapgene_render(self, workflow_id: str, *, output_path: str, size: int = 1200) -> dict:
+        """Render a map for the exact SnapGene artifact converted in this run."""
+        session = self._require_validated_construct(workflow_id)
+        construct = self._require_snapgene_construct(session)
+        map_path = self.snapgene.render_map(construct, output_path=output_path, size=size)
+        session.snapgene_map_path = map_path
+        result = {"construct": construct.to_dict(), "map_path": map_path, "size": size}
+        self._record(session, "snapgene_render", {"output_path": output_path, "size": size}, result, destructive=False)
+        return result
+
+    def snapgene_open(self, workflow_id: str, *, path: str | None = None, format: str = "snapgene") -> dict:
+        session = self._require_validated_construct(workflow_id)
+        construct = self._require_snapgene_construct(session)
+        if path is not None and (path != construct.path or format != construct.format):
+            raise WorkflowError(
+                "snapgene_reference_mismatch",
+                "Open must use the exact ConstructRef returned by snapgene_convert.",
+                {"converted": construct.to_dict(), "requested": {"path": path, "format": format}},
+            )
         self.snapgene.open(construct)
         result = {"opened": construct.to_dict()}
         self._record(session, "snapgene_open", construct.to_dict(), result, destructive=False)
@@ -94,13 +138,26 @@ class WorkflowManager:
 
     def _require_validated_construct(self, workflow_id: str) -> WorkflowSession:
         session = self._require_construct(workflow_id)
-        if session.validated_construct_path != session.current_construct.path:
+        if session.validated_construct != session.current_construct:
             raise WorkflowError("validation_required", "Validate the current construct successfully before saving or using SnapGene.")
         return session
+
+    @staticmethod
+    def _require_snapgene_construct(session: WorkflowSession) -> ConstructRef:
+        if session.snapgene_construct is None or session.snapgene_source_construct != session.current_construct:
+            raise WorkflowError(
+                "snapgene_conversion_required",
+                "Convert the current validated GenBank construct before this SnapGene operation.",
+            )
+        return session.snapgene_construct
 
     def _mutation(self, session: WorkflowSession, name: str, input: dict, construct: ConstructRef) -> dict:
         session.current_construct = construct
         session.validated_construct_path = None
+        session.validated_construct = None
+        session.snapgene_construct = None
+        session.snapgene_source_construct = None
+        session.snapgene_map_path = None
         result = {"construct": construct.to_dict(), "validation_required": True}
         self._record(session, name, input, result, destructive=True)
         return result

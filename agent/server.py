@@ -47,7 +47,14 @@ def _run(callable_: Any) -> dict[str, Any]:
     except WorkflowError as error:
         return error.to_dict()
     except Exception as error:  # adapters must not crash the MCP transport
-        return WorkflowError("adapter_error", str(error)).to_dict()
+        # BiologyError and SnapGene's domain errors intentionally remain
+        # ordinary exceptions at the adapter boundary. Preserve their stable
+        # code/message/details when translating them to MCP JSON.
+        return WorkflowError(
+            getattr(error, "code", "adapter_error"),
+            getattr(error, "message", str(error)),
+            getattr(error, "details", {}),
+        ).to_dict()
 
 
 @mcp.tool()
@@ -105,7 +112,13 @@ def snapgene_convert(workflow_id: str, output_path: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-def snapgene_open(workflow_id: str, path: str, format: str = "snapgene") -> dict[str, Any]:
+def snapgene_render(workflow_id: str, output_path: str, size: int = 1200) -> dict[str, Any]:
+    """Render a map for the exact SnapGene artifact converted in this workflow."""
+    return _run(lambda: manager.snapgene_render(workflow_id, output_path=output_path, size=size))
+
+
+@mcp.tool()
+def snapgene_open(workflow_id: str, path: str | None = None, format: str = "snapgene") -> dict[str, Any]:
     """Ask the SnapGene adapter to open an existing artifact."""
     return _run(lambda: manager.snapgene_open(workflow_id, path=path, format=format))
 
