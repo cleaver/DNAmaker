@@ -20,3 +20,9 @@ specified. Do not ask for confirmation of a mutation.
 
 The biology engine owns biological correctness. The SnapGene adapter owns GUI
 and SnapGene-specific failures. Do not reinterpret or hide their errors.
+
+For Gibson simulation, use `gibson_assemble` with ordered, already oriented linear
+fragment references and explicit exact overlap lengths. Circular products require
+last-to-first overlap too. This MVP does not design primers or prepare fragments;
+never describe ordinary region replacement as Gibson assembly. Validate the returned
+product before saving. Biology-only workflows do not require SnapGene.

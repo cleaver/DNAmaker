@@ -22,8 +22,18 @@ def _load_factory(setting: str) -> Any:
     return factory()
 
 
+class UnavailableSnapGene:
+    """Permit biology-only workflows without a desktop installation."""
+
+    def __getattr__(self, name: str) -> Any:
+        def unavailable(*args: Any, **kwargs: Any) -> Any:
+            raise WorkflowError("snapgene_unavailable", "The SnapGene adapter has not been configured.")
+        return unavailable
+
+
 def manager_from_environment() -> WorkflowManager:
     """Build the production manager from factories owned by Persons 1 and 2."""
     biology = _load_factory("DNA_MAKER_BIOLOGY_ADAPTER")
-    snapgene = _load_factory("DNA_MAKER_SNAPGENE_ADAPTER")
+    snapgene = (_load_factory("DNA_MAKER_SNAPGENE_ADAPTER")
+                if os.environ.get("DNA_MAKER_SNAPGENE_ADAPTER") else UnavailableSnapGene())
     return WorkflowManager(biology, snapgene)

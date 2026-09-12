@@ -174,6 +174,17 @@ class BiologyServiceAdapter:
         )
         return self._write_mutation(modified, "replace")
 
+    def gibson_assemble(
+        self, fragments: list[ConstructRef], *, overlaps: list[int], name: str,
+        circular: bool = True, min_overlap: int = 15,
+    ) -> ConstructRef:
+        from .assembly import assemble_gibson
+
+        loaded = [self._load(reference)[0] for reference in fragments]
+        product = assemble_gibson(loaded, overlaps=overlaps, name=name,
+                                  circular=circular, min_overlap=min_overlap)
+        return self._write_mutation(product, "gibson")
+
     def add_annotation(
         self,
         construct: ConstructRef,

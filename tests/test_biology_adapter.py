@@ -3,8 +3,8 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from Bio import SeqIO
 import pytest
+from Bio import SeqIO
 
 from agent.models import ConstructRef
 from agent.session import WorkflowManager

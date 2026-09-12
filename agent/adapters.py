@@ -14,6 +14,11 @@ class BiologyService(Protocol):
         self, construct: ConstructRef, *, target: str, replacement_sequence: str, replacement_name: str | None
     ) -> ConstructRef: ...
 
+    def gibson_assemble(
+        self, fragments: list[ConstructRef], *, overlaps: list[int], name: str,
+        circular: bool = True, min_overlap: int = 15,
+    ) -> ConstructRef: ...
+
     def add_annotation(
         self, construct: ConstructRef, *, name: str, feature_type: str, start: int, end: int, strand: int
     ) -> ConstructRef: ...

@@ -47,3 +47,18 @@ complete the action.
   to run before `snapgene_open` when a map is requested.
 - `workflow_status` is the complete reproducibility log and must remain JSON
   serializable.
+
+## Gibson MVP
+
+`BiologyService.gibson_assemble(fragments, *, overlaps, name, circular=True,
+min_overlap=15)` returns a new GenBank `ConstructRef`. Fragments are ordered,
+pre-oriented linear inputs; overlap lengths explicitly describe exact suffix/prefix
+junctions (including last-to-first for circular products). No primer design or
+assembly-efficiency prediction is performed. Every fragment must retain a non-overlap
+interior. A/C/G/T only. Source features and checked junctions are retained in the
+product; provenance is saved in its GenBank comment.
+
+The workflow/MCP `gibson_assemble` operation can start from an empty workflow,
+records all fragment references/settings, and resets validation and SnapGene state.
+Validate before saving. `DNA_MAKER_SNAPGENE_ADAPTER` is optional for biology-only
+startup; explicitly configured invalid adapters still report configuration errors.
