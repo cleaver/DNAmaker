@@ -298,12 +298,17 @@ For integration, each component owner exposes a zero-argument factory and the
 MCP process is started with these environment variables:
 
 ```bash
-DNA_MAKER_BIOLOGY_ADAPTER='biology.adapter:create_service'
+DNA_MAKER_BIOLOGY_ADAPTER='dnamaker.service:create_biology_adapter'
 DNA_MAKER_SNAPGENE_ADAPTER='snapgene.adapter:create_service'
 ```
 
 The factories must return implementations of the interfaces in
 [`agent/adapters.py`](agent/adapters.py).
+
+The biology adapter uses the current working directory as its workspace by
+default. Set `DNA_MAKER_WORKSPACE` to use a shared workspace explicitly; set
+`DNA_MAKER_BIOLOGY_ARTIFACT_DIR` to override the relative mutation-artifact
+directory when needed.
 
 ---
 

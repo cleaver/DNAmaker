@@ -1,5 +1,16 @@
 # Findings & Decisions
 
+## Current Priority: Adapter First
+
+The six-method `BiologyService` adapter described in [task_plan.md](task_plan.md) is implemented and verified. This handoff is the reviewable MVP; the broader package layout below remains a future direction, not a prerequisite.
+
+- Keep the shared method signatures and dataclass return types unchanged.
+- Build real file-backed operations and a zero-argument factory at `dnamaker.service:create_biology_adapter`.
+- Support GenBank, FASTA, and the supplement's documented JSON schema at handoff.
+- Verify the real biology adapter through `WorkflowManager`; fake only SnapGene for independent integration testing.
+- Defer PCR, translation/ORF tools, assembly, CLI expansion and comprehensive domain models until after the adapter handoff.
+- The shared bootstrap loads both adapters; the group will supply Person 1's factory for live use. Biology tests inject a fake SnapGene adapter directly.
+
 ## Requirements
 
 - Person 2 owns the molecular biology engine, independent of SnapGene.
@@ -63,7 +74,7 @@ tests/
 README.md
 ```
 
-## Today’s Acceptance Criteria
+## Later Engine Acceptance Criteria (after adapter milestone)
 
 - A clean checkout can install the package and run the test suite with `uv sync && uv run pytest`.
 - A GenBank fixture loads into `Construct`, saves, and loads back without sequence or feature loss.
@@ -88,7 +99,9 @@ README.md
 
 | Issue | Resolution |
 |-------|------------|
-| No existing package scaffold or dependency file | Plan to bootstrap with `uv` in Phase 3. |
+| Initial repository had no package scaffold | Resolved: `src/dnamaker/`, `pyproject.toml`, and `uv.lock` now exist. |
+| GenBank `source` feature spans the entire construct and overlaps every edit | Treat the canonical whole-construct `source` feature as structural metadata and resize it after mutation; retain rejection for other overlapping features. |
+| Circular BsaI known-answer test used the wrong 0-based start | Corrected the expected start from 4 to 3. |
 
 ## Resources
 

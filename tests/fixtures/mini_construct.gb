@@ -1,0 +1,21 @@
+LOCUS       pExample                  30 bp    DNA     circular SYN 12-SEP-2026
+DEFINITION  Synthetic construct for adapter tests.
+ACCESSION   PEXAMPLE
+VERSION     PEXAMPLE.1
+KEYWORDS    .
+SOURCE      synthetic DNA construct
+  ORGANISM  synthetic DNA construct
+            other sequences
+FEATURES             Location/Qualifiers
+     source          1..30
+                     /organism="synthetic DNA construct"
+                     /mol_type="other DNA"
+     misc_feature    11..14
+                     /label="target"
+                     /note="replace me"
+     misc_feature    23..26
+                     /label="downstream"
+                     /note="shifts after replacement"
+ORIGIN
+        1 aaaaggtctc ttttccccgg ggaaaatttt
+//
