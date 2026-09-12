@@ -2,7 +2,7 @@
 
 ## Goal
 
-By the end of today, deliver an installable, SnapGene-independent Python package that represents constructs, reads/writes GenBank and FASTA, performs safe core sequence/feature operations, scans restriction sites, simulates exact-match PCR, validates constructs, and proves the behavior with tests and a clear handoff contract.
+By the end of today, deliver an installable, SnapGene-independent Python package behind the shared `agent.adapters.BiologyService` contract that represents constructs, reads/writes GenBank and FASTA, performs safe core sequence/feature operations, scans restriction sites, simulates exact-match PCR, validates constructs, and proves the behavior with tests and a clear handoff contract.
 
 ## Current Phase
 
@@ -22,6 +22,7 @@ Phase 1 — Requirements & Discovery
 
 - [x] Choose the Python package layout
 - [x] Define the canonical construct/feature data contract
+- [x] Align the adapter boundary with the shared `CONTRACT.md`
 - [x] Define coordinate, topology, alphabet, and error-handling rules
 - [x] Define explicit non-goals for today
 - **Status:** complete
@@ -29,6 +30,7 @@ Phase 1 — Requirements & Discovery
 ### Phase 3: Implementation
 
 - [ ] Bootstrap the package with `uv`
+- [ ] Implement `dnamaker.service:create_biology_adapter` for the shared bootstrap seam
 - [ ] Implement `Construct`, `Feature`, and `Location` models
 - [ ] Implement GenBank and FASTA I/O
 - [ ] Implement reverse complement, translation, replace-region, and feature operations
@@ -50,6 +52,7 @@ Phase 1 — Requirements & Discovery
 ### Phase 5: Integration Handoff
 
 - [ ] Document the public API and JSON/GenBank interchange assumptions
+- [ ] Document the Person 2 supplement and any terms requiring team confirmation
 - [ ] Give Person 1 a sample GenBank output and coordinate convention
 - [ ] Give Person 3 stable function names, schemas, and validation/error behavior
 - [ ] Commit the MVP as one reviewable change set
@@ -66,7 +69,9 @@ Phase 1 — Requirements & Discovery
 
 | Decision | Rationale |
 |----------|-----------|
-| Python package under `src/dnamaker_bio/` | Matches the project scope and keeps the biology layer independent of SnapGene and the agent layer. |
+| Python package under `src/dnamaker/` | Matches the existing scaffold while keeping the biology layer independent of SnapGene. |
+| Implement the shared `agent.adapters.BiologyService` at a thin adapter boundary | Keeps Person 3's orchestration stable while allowing richer Person 2 domain models internally. |
+| Expose `dnamaker.service:create_biology_adapter` | Matches `agent.bootstrap`'s existing `module:factory` loading seam. |
 | Use `uv` for environment and dependency management | `uv` is installed in the repository environment and gives reproducible commands with a lockfile. |
 | Use Biopython for GenBank/FASTA and restriction primitives | Avoids reimplementing established file parsing and enzyme definitions. Keep project-specific behavior in our own modules. |
 | Use Pydantic models for `Construct`, `Feature`, and `Location` | Gives Person 3 a serializable, validated contract and makes invalid operations explicit. |
@@ -83,7 +88,9 @@ Phase 1 — Requirements & Discovery
 
 ## Notes
 
-- The repository currently contains only `README.md` and `SCOPE.md`; there is no existing Python package to preserve.
+- The repository now includes the upstream agent/MCP foundation and a `src/dnamaker/` scaffold; the biology implementation should integrate behind the existing adapter protocol.
+- The shared contract is at the repository root; Person 2-specific details live in `docs/person2/CONTRACT.md`.
+- Personal planning files live under `docs/person2/` so they do not appear to be shared project policy.
 - The plan is intentionally a vertical slice. Do not spend the day implementing every item in the broad scope list.
 - A feature is not “done” until it has a test and its public behavior is documented.
 - Update this file and `progress.md` after each phase; record all test failures before retrying.

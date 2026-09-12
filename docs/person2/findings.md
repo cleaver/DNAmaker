@@ -6,14 +6,16 @@
 - The engine needs sequence manipulation, feature/annotation manipulation, primer handling, restriction analysis, ORF/translation, PCR simulation, assembly logic, validation, and biological rules over time.
 - The shared interchange should be GenBank plus a structured JSON representation.
 - Person 1 owns SnapGene integration; Person 3 owns agent/MCP/orchestration.
+- The shared root `CONTRACT.md` makes `agent.adapters.BiologyService` the authoritative Python interface for Person 2.
 - Today’s achievable MVP must establish the core contract and a working, tested vertical slice rather than implement the entire long-term scope.
 
 ## Research Findings
 
-- `SCOPE.md` is the only project-specific design document besides `README.md`.
-- The repository is otherwise empty and clean on branch `main` tracking `origin/main`.
+- `SCOPE.md`, `README.md`, and the shared root `CONTRACT.md` define the project context and integration boundary.
+- The repository contains the upstream agent/MCP foundation, demo SnapGene files, a `src/dnamaker/` scaffold, and the Person 2 planning files under `docs/person2/`.
 - Python `3.14.7` and `uv 0.9.22` are available; Poetry is not installed.
 - The scope itself proposes Python, Biopython, Pydantic, and primer3. For today, primer3 is deferred until the core contract and tests exist.
+- `agent.bootstrap` loads adapters through `module:factory`; the planned Person 2 factory is `dnamaker.service:create_biology_adapter`.
 
 ## Technical Decisions
 
@@ -27,14 +29,17 @@
 | GenBank is the primary artifact; FASTA is sequence-only | Preserves annotations while still supporting common input/output. |
 | Refuse a sequence edit that partially overlaps an existing feature unless an explicit policy is added | Prevents the most dangerous MVP failure: annotations silently describing the wrong bases. |
 | PCR requires exact primer binding matches and returns a structured product | Deterministic baseline for later primer design and mismatch/thermodynamic logic. |
+| Root `CONTRACT.md` is authoritative for the adapter boundary | Prevents Person 2's richer internal model from diverging from Person 3's orchestration protocol. |
+| Person 2-specific semantics belong in `docs/person2/CONTRACT.md` | Keeps shared policy small while making target resolution, payloads, and artifact behavior explicit. |
 
 ## Proposed Package Layout
 
 ```text
 pyproject.toml
 uv.lock
-src/dnamaker_bio/
+src/dnamaker/
   __init__.py
+  service.py             # shared BiologyService adapter factory
   models.py
   io.py
   sequence.py
@@ -69,6 +74,7 @@ README.md
 - Exact-match PCR returns one expected amplicon and a clear no-product result/error.
 - Validation catches bad DNA, invalid topology, out-of-bounds features, and malformed strands.
 - Person 1 can consume a documented GenBank artifact; Person 3 can call stable Python functions or serialize the Pydantic model.
+- The implementation exposes the shared BiologyService methods with the signatures in root `CONTRACT.md` and can be loaded through the bootstrap environment variable.
 
 ## Explicitly Deferred
 
@@ -88,7 +94,9 @@ README.md
 
 - Project scope: `SCOPE.md`
 - Project overview: `README.md`
-- Planned package root: `src/dnamaker_bio/`
+- Shared component contract: `CONTRACT.md`
+- Person 2 supplement: `docs/person2/CONTRACT.md`
+- Planned package root: `src/dnamaker/`
 
 ## Visual/Browser Findings
 

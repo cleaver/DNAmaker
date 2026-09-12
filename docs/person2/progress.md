@@ -36,12 +36,27 @@
 - Files created/modified:
   - None
 
+### Contract alignment & organization
+
+- **Status:** complete
+- Actions taken:
+  - Read the shared `CONTRACT.md` and confirmed that `agent.adapters.BiologyService` is the authoritative Person 2 boundary.
+  - Added `docs/person2/CONTRACT.md` for biology-specific semantics and open negotiation terms without changing shared policy.
+  - Moved `task_plan.md`, `findings.md`, and `progress.md` under `docs/person2/`.
+  - Updated the planning files to reference the actual `src/dnamaker/` scaffold and the `dnamaker.service:create_biology_adapter` seam.
+- Files created/modified:
+  - `docs/person2/CONTRACT.md` (created)
+  - `docs/person2/task_plan.md` (moved and updated)
+  - `docs/person2/findings.md` (moved and updated)
+  - `docs/person2/progress.md` (moved and updated)
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
 |------|-------|----------|--------|--------|
 | Repository inspection | `git status --short --branch` | Clean starting point | Clean `main` worktree | ✓ |
 | Toolchain inspection | `python --version`, `uv --version` | Required tools available | Python 3.14.7, uv 0.9.22 | ✓ |
+| Shared contract inspection | `CONTRACT.md` | Biology adapter boundary is explicit | `agent.adapters.BiologyService` confirmed | ✓ |
 
 ## Error Log
 
@@ -53,8 +68,8 @@
 
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 2 complete; implementation is pending. |
+| Where am I? | Contract alignment and planning organization are complete; implementation is pending. |
 | Where am I going? | Bootstrap, implement the core modules, test, then hand off the contract. |
 | What’s the goal? | A tested SnapGene-independent biology engine MVP today. |
-| What have I learned? | See `findings.md`; the repo is empty apart from project scope docs. |
-| What have I done? | Created the plan, findings, and progress files. |
+| What have I learned? | See `docs/person2/findings.md`; the shared adapter protocol is authoritative and biology-specific terms are documented separately. |
+| What have I done? | Created the Person 2 contract supplement and moved all personal planning files under `docs/person2/`. |
