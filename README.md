@@ -294,6 +294,10 @@ See [CONTRACT.md](CONTRACT.md) for the adapter contract and
 the tool-use policy. The server intentionally returns `biology_unavailable` or
 `snapgene_unavailable` until the two component owners inject their adapters.
 
+For the complete setup, tool reference, deterministic/manual usage, Codex
+configuration, Windows SnapGene runbook, and troubleshooting guide, see
+[`MCP_MANUAL.md`](MCP_MANUAL.md).
+
 For integration, each component owner exposes a zero-argument factory and the
 MCP process is started with these environment variables:
 
