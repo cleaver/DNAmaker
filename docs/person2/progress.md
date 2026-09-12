@@ -1,5 +1,17 @@
 # Progress Log
 
+## Real-fixture integration — 2026-09-12
+
+- Main now contains both exported GenBank fixtures and the SnapGene validation/provenance gate.
+- EGFP uses `join(679..681,682..684,685..1398)` for adjacent display segments; enabled this continuous interval while retaining rejection of gaps and origin crossings.
+- Replacement discards stale EGFP translation, product and segment notes.
+- Added `dnamaker.handoff`, producing a unique artifact directory with the saved GenBank, input/output SHA-256 hashes, validation checks, EcoRI sites and workflow log.
+- Saved artifact is reloaded and validated, so the final workflow reference identifies the saved file rather than an earlier mutation artifact.
+- Real output: 4724 bp circular, mCherry at `[678, 1389)`, EcoRI at 628 (0-based), existing CMV promoter preserved. Donor CDS passes complete-CDS translation and matches its annotated protein.
+- Full suite: 32 passed, 2 opt-in tests skipped. Tests verify exact edited sequence, vector features, coordinate shifts, safe joined targets, and conversion gates with a recording SnapGene adapter.
+- Live conversion/render/open remains for Person 1's Windows workspace; no live SnapGene action was performed here.
+- Inspection attempted an `inputs/README.md` that did not exist; handoff instructions now live in `docs/person2/HANDOFF.md`.
+
 ## Latest Decision: BiologyService Adapter Delivered
 
 - The adapter-first plan is implemented and verified.

@@ -142,6 +142,14 @@ linear.
   is created.
 - Origin-spanning circular feature edits are rejected in the MVP until a
   multi-part location representation is implemented.
+- Adjacent joined segments (including SnapGene's colored EGFP segments) are
+  accepted when they describe one continuous interval in strand order. Gapped
+  and origin-spanning targets remain unsupported. Replacement sequence is in
+  stored forward-sequence orientation; callers orient reverse-strand inserts.
+- Replacement annotations discard old identity, product, translation, notes,
+  and CDS-specific evidence/frame qualifiers. These describe the old sequence
+  and must not silently label the replacement. Donor qualifiers are not copied
+  by the string-based replacement API.
 
 ### `add_annotation(...) -> ConstructRef`
 
@@ -197,12 +205,10 @@ The following do not block Person 2's first adapter:
 - Dedicated `BiologyError` code mapping can be added after the adapter works;
   the adapter raises exceptions and never returns MCP `{ok: false}` payloads.
 
-One item is outside Person 2's plan and should be a small shared follow-up:
-
-- `WorkflowManager.snapgene_open` currently accepts an arbitrary path without
-  calling `_require_validated_construct`, despite the shared contract requiring
-  validation before opening the current construct. Person 3 should add the
-  gate or explicitly document the temporary exception.
+The earlier shared follow-up is resolved on main: `WorkflowManager.snapgene_open`
+requires validation and the exact artifact returned by conversion. Conversion
+also requires a GenBank reference. A transferred validation report does not
+restore workflow state: the receiving workflow must read and validate the file.
 
 Until the hardening work is scheduled, the defaults above are the Person 2
 implementation assumptions.

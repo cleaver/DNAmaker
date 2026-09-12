@@ -1,5 +1,13 @@
 # Findings & Decisions
 
+## Real-fixture handoff
+
+- Shared GenBank inputs arrived on main. EGFP is a 720-base continuous CDS encoded as three adjacent join segments; mCherry is a 711-base complete CDS.
+- Direct replacement yields 4724 bp and preserves the existing CMV promoter. No extra promoter annotation is needed.
+- Removing stale target metadata is necessary: retaining EGFP `/translation`, `/product`, or color-segment coordinate notes would misdescribe mCherry.
+- Main's orchestration now enforces GenBank conversion and validation/provenance gates for open/render. Receiving workflows must revalidate transferred files.
+- See `HANDOFF.md` for the reproducible command and Windows integration steps.
+
 ## Current Priority: Adapter First
 
 The six-method `BiologyService` adapter described in [task_plan.md](task_plan.md) is implemented and verified. This handoff is the reviewable MVP; the broader package layout below remains a future direction, not a prerequisite.
