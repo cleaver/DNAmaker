@@ -62,6 +62,10 @@ class WorkflowSession:
     created_at: str = field(default_factory=utc_now)
     current_construct: ConstructRef | None = None
     validated_construct_path: str | None = None
+    validated_construct: ConstructRef | None = None
+    snapgene_construct: ConstructRef | None = None
+    snapgene_source_construct: ConstructRef | None = None
+    snapgene_map_path: str | None = None
     operations: list[OperationRecord] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -73,5 +77,15 @@ class WorkflowSession:
             if self.current_construct
             else None,
             "validated_construct_path": self.validated_construct_path,
+            "validated_construct": self.validated_construct.to_dict()
+            if self.validated_construct
+            else None,
+            "snapgene_construct": self.snapgene_construct.to_dict()
+            if self.snapgene_construct
+            else None,
+            "snapgene_source_construct": self.snapgene_source_construct.to_dict()
+            if self.snapgene_source_construct
+            else None,
+            "snapgene_map_path": self.snapgene_map_path,
             "operations": [operation.to_dict() for operation in self.operations],
         }

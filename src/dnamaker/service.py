@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from itertools import pairwise
 from pathlib import Path
 from uuid import uuid4
 
@@ -75,7 +76,11 @@ class BiologyServiceAdapter:
 
         target_index = matches[0]
         target_feature = loaded.features[target_index]
-        if len(target_feature.locations()) != 1:
+        parts = target_feature.locations()
+        # SnapGene uses adjacent join segments for display colors. They are
+        # editable as one interval; gaps and origin crossings are not.
+        ordered_parts = parts if target_feature.strand != -1 else list(reversed(parts))
+        if any(left.end != right.start for left, right in pairwise(ordered_parts)):
             raise BiologyError(
                 "unsupported_location",
                 "Origin-spanning target features are not supported by the MVP.",
@@ -111,7 +116,24 @@ class BiologyServiceAdapter:
                 qualifiers = {
                     key: list(values)
                     for key, values in feature.qualifiers.items()
-                    if key not in {"label", "gene", "name", "locus_tag"}
+                    if key
+                    not in {
+                        "label",
+                        "gene",
+                        "name",
+                        "locus_tag",
+                        "translation",
+                        "product",
+                        "note",
+                        "protein_id",
+                        "db_xref",
+                        "codon_start",
+                        "transl_table",
+                        "transl_except",
+                        "function",
+                        "experiment",
+                        "inference",
+                    }
                 }
                 qualifiers["label"] = [replacement_name]
                 updated_features.append(

@@ -10,7 +10,9 @@ specified. Do not ask for confirmation of a mutation.
 4. Never guess a target feature, coordinates, sequence, or output path. Ask for
    the missing value instead.
 5. Run `validate_construct` after every sequence or annotation mutation and
-   before saving, converting, or opening the resulting construct.
+   before saving, converting, rendering, or opening the resulting construct.
+   For SnapGene, convert the validated GenBank result first, then render a map
+   and/or open the exact returned SnapGene reference; never invent an open path.
 6. Treat `ok: false` as a stop for the dependent step. Explain the structured
    error, preserve the operation log, and ask only for information needed to
    recover.

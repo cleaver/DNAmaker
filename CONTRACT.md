@@ -29,7 +29,9 @@ and SnapGene conversion, but remains in the workflow log.
 
 `agent.adapters.SnapGeneService` exposes `convert` and `open`. `convert`
 receives a validated `ConstructRef` and returns a new `snapgene` reference.
-`open` has no return value; it raises when SnapGene cannot complete the action.
+`render_map` receives that same converted reference and returns a workspace-
+relative PNG path. `open` has no return value; it raises when SnapGene cannot
+complete the action.
 
 ## Orchestration rules
 
@@ -37,5 +39,11 @@ receives a validated `ConstructRef` and returns a new `snapgene` reference.
 - Every mutation invalidates previous validation.
 - A successful validation is required before saving, converting, or opening the
   current construct through SnapGene.
+- SnapGene conversion accepts only a validated GenBank `ConstructRef`.
+- `snapgene_open` accepts only the exact SnapGene `ConstructRef` returned by
+  `snapgene_convert` in the same workflow; it may be omitted to open that stored
+  reference directly.
+- `snapgene_render` accepts only that same converted reference and is required
+  to run before `snapgene_open` when a map is requested.
 - `workflow_status` is the complete reproducibility log and must remain JSON
   serializable.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from agent.errors import WorkflowError
 from agent.models import ConstructRef, ConstructSummary, ValidationResult
 from agent.session import WorkflowManager
 
@@ -32,6 +33,9 @@ class FakeSnapGene:
 
     def convert(self, construct, *, output_path):
         return ConstructRef(path=output_path, format="snapgene", name=construct.name)
+
+    def render_map(self, construct, *, output_path, size=1200):
+        return output_path
 
     def open(self, construct):
         self.opened.append(construct.path)
@@ -70,3 +74,21 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "read_construct"):
             self.manager.replace_region(self.workflow.id, target="GFP", replacement_sequence="ATGC", replacement_name=None)
 
+    def test_open_requires_the_validated_conversion_from_this_workflow(self):
+        workflow_id = self.workflow.id
+        self.manager.read_construct(workflow_id, ConstructRef("inputs/example.gb"))
+        self.manager.validate_construct(workflow_id)
+
+        with self.assertRaisesRegex(WorkflowError, "Convert") as caught:
+            self.manager.snapgene_open(workflow_id, path="outputs/arbitrary.dna")
+        self.assertEqual(caught.exception.code, "snapgene_conversion_required")
+
+        converted = self.manager.snapgene_convert(workflow_id, output_path="outputs/result.dna")
+        rendered = self.manager.snapgene_render(workflow_id, output_path="outputs/result.png")
+        self.assertEqual(rendered["map_path"], "outputs/result.png")
+        with self.assertRaisesRegex(WorkflowError, "exact ConstructRef") as caught:
+            self.manager.snapgene_open(workflow_id, path="outputs/other.dna")
+        self.assertEqual(caught.exception.code, "snapgene_reference_mismatch")
+
+        opened = self.manager.snapgene_open(workflow_id)
+        self.assertEqual(opened["opened"], converted["construct"])
