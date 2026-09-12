@@ -24,6 +24,7 @@ def assemble_gibson(
     """Join each suffix to the next prefix; last overlap closes circular products.
 
     All inputs must be linear, unambiguous A/C/G/T, and already oriented.
+    Base case is normalized before validation and matching; output is uppercase.
     Each fragment must contribute bases outside its incoming/outgoing overlaps.
     Overlap lengths are explicit so repeated ends cannot silently select a join.
     """
@@ -39,6 +40,12 @@ def assemble_gibson(
             "invalid_overlap",
             f"Provide exactly {expected} overlap lengths in junction order.",
         )
+    # Assignment and model_copy updates can bypass Construct's initial validator.
+    # Normalize only base case: preserve coordinates and the caller's objects.
+    fragments = [
+        fragment.model_copy(update={"sequence": fragment.sequence.upper()})
+        for fragment in fragments
+    ]
     for index, fragment in enumerate(fragments):
         valid, checks = validate_construct_data(fragment)
         if not valid or set(fragment.sequence) - set("ACGT"):

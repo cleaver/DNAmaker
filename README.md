@@ -390,6 +390,7 @@ linear products need one fewer. Explicit lengths resolve the intended junction
 when repeated sequence offers several matches; the engine does not check for
 alternative experimental assemblies. Each fragment must contribute sequence
 outside its two overlaps. Inputs must contain only A/C/G/T and be linear.
+Lowercase and mixed-case bases are normalized to uppercase before assembly.
 The default minimum is a software acceptance threshold, not an efficiency guarantee.
 
 After assembly, call `validate_construct`, then `save_construct`. Assembly creates
