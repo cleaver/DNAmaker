@@ -64,6 +64,9 @@ def write_construct(construct: Construct, path: Path, format: str) -> None:
     require_format(format, output=True)
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
+        # Copied/assigned sequences may bypass initial model normalization.
+        # Change only case so annotation coordinates and source objects stay intact.
+        construct = construct.model_copy(update={"sequence": construct.sequence.upper()})
         if format == "json":
             payload = {
                 "schema_version": JSON_SCHEMA_VERSION,

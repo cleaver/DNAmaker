@@ -7,7 +7,7 @@ from .sequence import IUPAC_DNA
 
 
 def validate_construct_data(construct: Construct) -> tuple[bool, list[dict]]:
-    invalid_symbols = sorted(set(construct.sequence) - IUPAC_DNA)
+    invalid_symbols = sorted(set(construct.sequence.upper()) - IUPAC_DNA)
     sequence_passed = bool(construct.sequence) and not invalid_symbols
     checks = [
         {

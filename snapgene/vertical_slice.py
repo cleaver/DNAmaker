@@ -90,7 +90,7 @@ def run(*, open_result: bool = True) -> dict:
         saved_ref = ConstructRef(**saved["construct"])
         record = SeqIO.read(root / saved_ref.path, "genbank")
         require(
-            str(record.seq) == str(original.seq),
+            str(record.seq).upper() == str(original.seq).upper(),
             "Annotation unexpectedly changed the sequence.",
         )
         require(
@@ -124,7 +124,7 @@ def run(*, open_result: bool = True) -> dict:
         )
         roundtrip = SeqIO.read(root / exported.path, "genbank")
         require(
-            str(roundtrip.seq) == str(record.seq),
+            str(roundtrip.seq).upper() == str(record.seq).upper(),
             "SnapGene conversion changed the sequence.",
         )
         require(
