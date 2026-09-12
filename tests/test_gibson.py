@@ -188,3 +188,23 @@ def test_mcp_tool_accepts_structured_fragment_refs(tmp_path):
         )
     assert result["ok"]
     assert result["result"]["validation_required"]
+
+
+@pytest.mark.parametrize("via_copy", [False, True])
+def test_mixed_case_fragments_are_normalized_at_assembly_boundary(via_copy):
+    inputs = fragments()
+    mixed = RIGHT.lower() + INSERT + LEFT.lower()
+    if via_copy:
+        inputs[1] = inputs[1].model_copy(update={"sequence": mixed})
+    else:
+        inputs[1].sequence = mixed
+    inputs[1].features = [
+        Feature(name="MixedCase label", type="misc_feature", start=20, end=70)
+    ]
+    product = assemble_gibson(inputs, overlaps=[20, 20], name="MixedCase product")
+    assert product.sequence == LEFT + CORE + RIGHT + INSERT
+    assert product.sequence.isupper()
+    assert inputs[1].sequence == mixed  # Do not mutate the caller's construct.
+    assert product.name == "MixedCase product"
+    assert product.features[0].name == "MixedCase label"
+    assert (product.features[0].start, product.features[0].end) == (110, 160)
