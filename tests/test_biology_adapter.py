@@ -3,6 +3,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+from Bio import SeqIO
 import pytest
 
 from agent.models import ConstructRef
@@ -13,6 +14,7 @@ from dnamaker.models import Construct, Feature
 from dnamaker.service import BiologyServiceAdapter, create_biology_adapter
 
 FIXTURES = Path(__file__).parent / "fixtures"
+PROJECT_ROOT = Path(__file__).parent.parent
 
 
 def copy_fixture(tmp_path: Path, name: str) -> str:
@@ -139,6 +141,31 @@ def test_replace_region_preserves_input_and_shifts_downstream_features(
     )
     assert (replacement["start"], replacement["end"]) == (10, 16)
     assert (downstream["start"], downstream["end"]) == (24, 28)
+
+
+def test_replace_contiguous_joined_feature_from_real_snapgene_export(
+    tmp_path: Path,
+) -> None:
+    adapter = BiologyServiceAdapter(tmp_path)
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    shutil.copy2(PROJECT_ROOT / "inputs/pEGFP-N1.gb", inputs / "pEGFP-N1.gb")
+    mCherry = SeqIO.read(PROJECT_ROOT / "inputs/mCherry.gb", "genbank")
+
+    result = adapter.replace_region(
+        ConstructRef("inputs/pEGFP-N1.gb", "genbank"),
+        target="EGFP",
+        replacement_sequence=str(mCherry.seq),
+        replacement_name="mCherry",
+    )
+    summary = adapter.read_construct(result)
+    replacement = next(feature for feature in summary.features if feature["name"] == "mCherry")
+    poly_a = next(feature for feature in summary.features if feature["name"] == "SV40 poly(A) signal")
+
+    assert summary.sequence_length == 4724
+    assert (replacement["start"], replacement["end"]) == (678, 1389)
+    assert (poly_a["start"], poly_a["end"]) == (1511, 1633)
+    assert replacement.get("parts") is None
 
 
 def test_replace_region_rejects_ambiguous_and_overlapping_targets(
@@ -318,6 +345,58 @@ def test_real_adapter_runs_through_workflow_manager(tmp_path: Path) -> None:
     assert [reference.to_dict() for reference in snapgene.opened] == [
         converted["construct"]
     ]
+
+
+def test_real_input_vertical_slice_reaches_snapgene_boundary(tmp_path: Path) -> None:
+    adapter = BiologyServiceAdapter(tmp_path)
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    shutil.copy2(PROJECT_ROOT / "inputs/pEGFP-N1.gb", inputs / "pEGFP-N1.gb")
+    mCherry = SeqIO.read(PROJECT_ROOT / "inputs/mCherry.gb", "genbank")
+
+    class FakeSnapGene:
+        def convert(self, construct: ConstructRef, *, output_path: str) -> ConstructRef:
+            assert construct.format == "genbank"
+            return ConstructRef(output_path, "snapgene", construct.name)
+
+        def render_map(self, construct: ConstructRef, *, output_path: str, size: int = 1200) -> str:
+            assert construct.format == "snapgene"
+            return output_path
+
+        def open(self, construct: ConstructRef) -> None:
+            assert construct.format == "snapgene"
+
+    manager = WorkflowManager(adapter, FakeSnapGene())
+    workflow = manager.start("Replace EGFP with mCherry and prepare a SnapGene map")
+    manager.read_construct(workflow.id, ConstructRef("inputs/pEGFP-N1.gb", "genbank"))
+    mutation = manager.replace_region(
+        workflow.id,
+        target="EGFP",
+        replacement_sequence=str(mCherry.seq),
+        replacement_name="mCherry",
+    )
+    sites = manager.find_restriction_sites(workflow.id, enzyme="EcoRI")
+    validation = manager.validate_construct(workflow.id)
+    saved = manager.save_construct(
+        workflow.id,
+        output_path="outputs/pEGFP-N1-mCherry.gb",
+        output_format="genbank",
+    )
+    converted = manager.snapgene_convert(
+        workflow.id, output_path="outputs/pEGFP-N1-mCherry.dna"
+    )
+    rendered = manager.snapgene_render(
+        workflow.id, output_path="outputs/pEGFP-N1-mCherry.png"
+    )
+    opened = manager.snapgene_open(workflow.id)
+
+    assert mutation["construct"]["format"] == "genbank"
+    assert isinstance(sites["sites"], list)
+    assert validation["valid"] is True
+    assert (tmp_path / saved["construct"]["path"]).is_file()
+    assert converted["construct"]["format"] == "snapgene"
+    assert rendered["map_path"] == "outputs/pEGFP-N1-mCherry.png"
+    assert opened["opened"] == converted["construct"]
 
 
 def test_factory_reads_workspace_configuration(

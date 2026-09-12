@@ -76,17 +76,25 @@ class BiologyServiceAdapter:
 
         target_index = matches[0]
         target_feature = loaded.features[target_index]
-        parts = target_feature.locations()
-        # SnapGene uses adjacent join segments for display colors. They are
-        # editable as one interval; gaps and origin crossings are not.
-        ordered_parts = parts if target_feature.strand != -1 else list(reversed(parts))
+        target_locations = target_feature.locations()
+        # Preserve strand order so origin-spanning joins remain unsupported.
+        ordered_parts = (
+            target_locations
+            if target_feature.strand != -1
+            else list(reversed(target_locations))
+        )
         if any(left.end != right.start for left, right in pairwise(ordered_parts)):
             raise BiologyError(
                 "unsupported_location",
-                "Origin-spanning target features are not supported by the MVP.",
+                "Non-contiguous or origin-spanning target features are not supported by the MVP.",
                 {"target": target},
             )
-        start, end = target_feature.start, target_feature.end
+        # SnapGene can export one biological feature as adjacent joined
+        # segments (for example EGFP in pEGFP-N1). Treat that representation as
+        # the equivalent single interval for replacement, while continuing to
+        # reject genuine gaps and origin-spanning locations.
+        start = min(part.start for part in target_locations)
+        end = max(part.end for part in target_locations)
         if not (0 <= start < end <= len(loaded.sequence)):
             raise BiologyError(
                 "invalid_feature_location",
