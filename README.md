@@ -269,3 +269,19 @@ The final system should allow a user to describe complex molecular-biology tasks
 10. Return the resulting construct and a clear record of what was performed.
 
 The system should be **modular, reproducible, testable, and independent of SnapGene wherever possible**.
+
+---
+
+## SnapGene Demo Prompts
+
+1. “Open `pEGFP-N1.dna`, replace the complete EGFP CDS with the CDS from `mCherry.dna` using Gibson assembly, annotate mCherry, identify all EcoRI sites, save the result as `pEGFP-N1-mCherry.dna`, and export a plasmid map.”
+
+2. “Open `pUC19.dna` and insert `GFP.dna` into the multiple cloning site using Gibson assembly. Annotate the GFP CDS, save the construct as `pUC19-GFP.dna`, and export a plasmid map.”
+
+3. “Open `pET-28a(+).dna` and insert `mTagBFP2.dna` using Gibson assembly while preserving the N-terminal 6xHis tag and reading frame. Save it as `pET-28a-mTagBFP2.dna` and export a plasmid map.”
+
+4. “Open `pcDNA3.1(+).dna` and insert `Citrine.dna` downstream of the CMV promoter using Gibson assembly. Annotate the Citrine CDS, save it as `pcDNA3.1-Citrine.dna`, and export a plasmid map.”
+
+5. “Open `pEGFP-N1.dna`, replace the complete EGFP CDS with `tdTomato.dna` using Gibson assembly, annotate the new CDS, save it as `pEGFP-N1-tdTomato.dna`, and export a plasmid map.”
+
+These are demonstration tasks. The agent should preserve feature orientation, reading frame, start and stop codons, and surrounding vector elements.
