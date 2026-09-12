@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from itertools import pairwise
 from pathlib import Path
 from uuid import uuid4
 
@@ -76,7 +77,13 @@ class BiologyServiceAdapter:
         target_index = matches[0]
         target_feature = loaded.features[target_index]
         target_locations = target_feature.locations()
-        if len(target_locations) != 1 and not _is_contiguous_feature(target_locations):
+        # Preserve strand order so origin-spanning joins remain unsupported.
+        ordered_parts = (
+            target_locations
+            if target_feature.strand != -1
+            else list(reversed(target_locations))
+        )
+        if any(left.end != right.start for left, right in pairwise(ordered_parts)):
             raise BiologyError(
                 "unsupported_location",
                 "Non-contiguous or origin-spanning target features are not supported by the MVP.",
@@ -117,7 +124,24 @@ class BiologyServiceAdapter:
                 qualifiers = {
                     key: list(values)
                     for key, values in feature.qualifiers.items()
-                    if key not in {"label", "gene", "name", "locus_tag"}
+                    if key
+                    not in {
+                        "label",
+                        "gene",
+                        "name",
+                        "locus_tag",
+                        "translation",
+                        "product",
+                        "note",
+                        "protein_id",
+                        "db_xref",
+                        "codon_start",
+                        "transl_table",
+                        "transl_except",
+                        "function",
+                        "experiment",
+                        "inference",
+                    }
                 }
                 qualifiers["label"] = [replacement_name]
                 updated_features.append(
@@ -264,14 +288,4 @@ def _is_whole_construct_source(feature: Feature, sequence_length: int) -> bool:
         and feature.parts is None
         and feature.start == 0
         and feature.end == sequence_length
-    )
-
-
-def _is_contiguous_feature(locations: list) -> bool:
-    if len(locations) < 2:
-        return True
-    ordered = sorted(locations, key=lambda location: location.start)
-    return all(
-        current.start < current.end and current.end == following.start
-        for current, following in zip(ordered, ordered[1:])
     )

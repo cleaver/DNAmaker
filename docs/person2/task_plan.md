@@ -6,7 +6,19 @@ Next milestone: deliver a working `agent.adapters.BiologyService` implementation
 
 ## Current Phase
 
-Phase 5 — Integration handoff complete
+Phase 6 — Real-fixture GenBank handoff complete; live Windows conversion pending
+
+## Phase 6: Real-fixture integration (2026-09-12)
+
+- [x] Inspect shared `inputs/pEGFP-N1.gb` and `inputs/mCherry.gb`.
+- [x] Support adjacent joined target segments without enabling gapped or origin-spanning edits.
+- [x] Remove stale target CDS metadata during replacement.
+- [x] Add `uv run python -m dnamaker.handoff` to produce GenBank plus a validation/provenance report.
+- [x] Verify exact replacement sequence, preserved vector features, shifted coordinates, donor translation, and conversion validation gates.
+- [x] Confirm main now enforces validation and converted-artifact provenance before opening SnapGene.
+- [ ] Person 1: regenerate or transfer the handoff into the Windows workspace, revalidate the exact saved reference, convert, render, and open.
+
+This demo performs direct CDS replacement; Gibson assembly remains deferred.
 
 ## Delivered Milestone: BiologyService Adapter
 

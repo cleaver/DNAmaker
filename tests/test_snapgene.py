@@ -1,15 +1,14 @@
-from contextlib import nullcontext
-from pathlib import Path
 import os
 import subprocess
 import tempfile
 import unittest
+from contextlib import nullcontext
+from pathlib import Path
 from unittest.mock import patch
 
 from agent.errors import WorkflowError
 from agent.models import ConstructRef
 from snapgene.adapter import DesktopSnapGeneService
-
 
 DNA = b"\x09\x00\x00\x00\x0eSnapGene\x00\x01\x00\x01\x00\x01"
 
