@@ -5,6 +5,13 @@ shared contract remains authoritative at the integration boundary. This file
 defines the biology-specific behavior that the shared contract intentionally
 leaves open.
 
+## Hackathon decision
+
+Person 2 will proceed against the shared interface without waiting for edits to
+the root contract. The defaults in this supplement are the working agreement
+for the first integrated demo. They are deliberately narrow and can be
+hardened later without changing the biology implementation's internal model.
+
 ## Alignment with the shared contract
 
 Person 2 will provide an implementation of `agent.adapters.BiologyService`.
@@ -38,6 +45,9 @@ remain Person 1's responsibility.
 - Intermediate mutation artifacts are written below the configured workspace
   artifact directory. Callers must use the returned path and must not infer a
   filename.
+- For the hackathon, a shared local workspace and collision-resistant paths are
+  sufficient; content-addressed storage and cross-machine artifact transfer
+  are deferred until the VPS/Windows workflow is exercised.
 - `save_construct` writes to the caller-supplied `output_path`. Supported
   output formats are `genbank`, `fasta`, and `json`; `snapgene` output belongs
   to Person 1.
@@ -161,19 +171,24 @@ feature_strands
 false result for biological invalidity and raises only when validation itself
 cannot be performed.
 
-## Open terms for team confirmation
+## Deferred hardening and one shared follow-up
 
-These are the only remaining decisions that may need negotiation with Persons
-1 and 3:
+The following do not block Person 2's first adapter:
 
-1. Confirm the artifact-directory configuration and collision-resistant naming
-   policy for mutation results.
-2. Confirm whether the shared contract should add typed models for restriction
-   sites and validation checks instead of `dict` payloads.
-3. Confirm whether circular, origin-spanning features are required for the
-   first integrated demo or can remain outside the MVP.
-4. Confirm the shared error-code mapping for `BiologyError`; the adapter will
-   raise exceptions and will never return MCP `{ok: false}` payloads itself.
+- Typed result models can replace the current `dict` payloads after the first
+  end-to-end workflow.
+- Content hashes, durable workflow state, and cross-machine artifact transfer
+  can be added when the VPS/Windows execution path is introduced.
+- Circular origin-spanning edits remain out of scope for the first demo.
+- Dedicated `BiologyError` code mapping can be added after the adapter works;
+  the adapter raises exceptions and never returns MCP `{ok: false}` payloads.
 
-Until those terms are changed in the shared contract, the defaults above are
-the Person 2 implementation assumptions.
+One item is outside Person 2's plan and should be a small shared follow-up:
+
+- `WorkflowManager.snapgene_open` currently accepts an arbitrary path without
+  calling `_require_validated_construct`, despite the shared contract requiring
+  validation before opening the current construct. Person 3 should add the
+  gate or explicitly document the temporary exception.
+
+Until the hardening work is scheduled, the defaults above are the Person 2
+implementation assumptions.

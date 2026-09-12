@@ -8,6 +8,14 @@ By the end of today, deliver an installable, SnapGene-independent Python package
 
 Phase 1 — Requirements & Discovery
 
+## Hackathon Mode
+
+- Treat `docs/person2/CONTRACT.md` as the working agreement for this segment.
+- Do not block implementation on typed payloads, content-addressed artifacts,
+  durable workflow state, or origin-spanning circular edits.
+- Ask Person 3 to make the one shared follow-up: enforce the validation gate in
+  `WorkflowManager.snapgene_open`.
+
 ## Phases
 
 ### Phase 1: Requirements & Discovery
@@ -63,7 +71,7 @@ Phase 1 — Requirements & Discovery
 1. What is the canonical interchange representation between Person 2, Person 1, and Person 3? — Use structured JSON/Pydantic internally and GenBank as the biological artifact format.
 2. What coordinate convention prevents integration bugs? — Use 0-based, half-open intervals internally; convert only at GenBank boundaries.
 3. What can be safely finished today? — Core representation, I/O, deterministic sequence operations, restriction scanning, exact-match PCR, validation, tests, and handoff docs.
-4. What should not block today’s MVP? — `.dna` parsing, GUI/SnapGene behavior, thermodynamic primer design, optimized assembly design, and full biological rule coverage.
+4. What should not block today’s MVP? — `.dna` parsing, GUI/SnapGene behavior, thermodynamic primer design, optimized assembly design, typed result models, durable artifact storage, origin-spanning edits, and full biological rule coverage.
 
 ## Decisions Made
 
@@ -91,6 +99,7 @@ Phase 1 — Requirements & Discovery
 - The repository now includes the upstream agent/MCP foundation and a `src/dnamaker/` scaffold; the biology implementation should integrate behind the existing adapter protocol.
 - The shared contract is at the repository root; Person 2-specific details live in `docs/person2/CONTRACT.md`.
 - Personal planning files live under `docs/person2/` so they do not appear to be shared project policy.
+- In hackathon mode, the Person 2 supplement is sufficient to proceed; only the `snapgene_open` validation-gate mismatch needs a shared implementation follow-up.
 - The plan is intentionally a vertical slice. Do not spend the day implementing every item in the broad scope list.
 - A feature is not “done” until it has a test and its public behavior is documented.
 - Update this file and `progress.md` after each phase; record all test failures before retrying.

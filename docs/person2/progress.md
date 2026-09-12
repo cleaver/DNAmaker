@@ -50,6 +50,21 @@
   - `docs/person2/findings.md` (moved and updated)
   - `docs/person2/progress.md` (moved and updated)
 
+### Hackathon scope decision
+
+- **Status:** complete
+- Actions taken:
+  - Made `docs/person2/CONTRACT.md` the working agreement for the first
+    integrated demo, without requiring edits to the shared root contract.
+  - Deferred typed result models, content-addressed/durable artifact storage,
+    origin-spanning edits, and dedicated biology error mapping.
+  - Recorded the single shared follow-up for Person 3: enforce validation in
+    `WorkflowManager.snapgene_open`.
+- Files created/modified:
+  - `docs/person2/CONTRACT.md` (updated)
+  - `docs/person2/task_plan.md` (updated)
+  - `docs/person2/progress.md` (updated)
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
